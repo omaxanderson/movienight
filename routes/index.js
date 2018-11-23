@@ -45,12 +45,7 @@ router.get('/movieVoteId', (req, res) => {
 				console.log("bummer");
 				throw err;
 			}
-			let response = {
-				status: 200,
-				results: rows[0].current_vote_id
-			}
-			console.log
-			res.send(JSON.stringify(response));
+			res.send(JSON.stringify({status: 200, results: rows[0].current_vote_id}));
 		}
 	);
 	connection.end();
@@ -63,30 +58,63 @@ router.post('/movie', (req, res) => {
 	var connection = mysql.createConnection(dbconfig);
 	connection.connect();
 
-	// create movie obj
-	let movie = {
-		movie_name: req.body.movieName,
-		movie_vote_id: 1, 	// TEMP - figure out best way to dynamically get movie_vote_id, probably simply the highest movie_vote_id
-		thumbnail_url: req.body.movieUrl,
-		movie_url: req.body.movieUrl 	// ehh, let's figure out how to pass both url's in this post
-	}
-	
-	// insert the movie into the db
-	connection.query(`INSERT INTO movie (movie_name, 
-		movie_vote_id, 
-		thumbnail_url,
-		movie_url) VALUES (?, ?, ?, ?)`,
-		[movie.movie_name, movie.movie_vote_id, movie.thumbnail_url, movie.movie_url],
-		(err, rows, fields) => {
-			if (err) {
-				console.log("gosh darn it that's a bummer");
-				throw err;
+	getCurrentMovieVoteId()
+		.then((id) => {
+			// create movie obj
+			let movie = {
+				movie_name: req.body.movieName,
+				movie_vote_id: id,
+				thumbnail_url: req.body.movieUrl,
+				movie_url: req.body.movieUrl 	// ehh, let's figure out how to pass both url's in this post
 			}
-			console.log(rows);
-	});
-	connection.end();
-	//console.log(req.body.movieName);
-	//console.log(req.body.movieUrl);
+
+			console.log(movie.movie_vote_id);
+			
+			// insert the movie into the db
+			connection.query(`INSERT INTO movie (movie_name, 
+				movie_vote_id, 
+				thumbnail_url,
+				movie_url) VALUES (?, ?, ?, ?)`,
+				[movie.movie_name, movie.movie_vote_id, movie.thumbnail_url, movie.movie_url],
+				(err, rows, fields) => {
+					if (err) {
+						console.log("gosh darn it that's a bummer");
+						console.log("Sending error response");
+					}
+					connection.end();
+
+					// send response
+					console.log("sending success response");
+					res.send(JSON.stringify({
+						status: 200,
+						message: "Successfully added movie to list"
+					}));
+				}
+			);
+		})
+		.catch((err) => {
+			console.log("damn it");
+			console.log(err);
+		});
 });
+
+function getCurrentMovieVoteId() {
+	return new Promise((resolve, reject) => {
+		var connection = mysql.createConnection(dbconfig);
+		connection.connect();
+		connection.query("SELECT MAX(movie_vote_id) AS current_vote_id FROM movie_vote", 
+			(err, rows, fields) => {
+				if (err) {
+					console.log("bummer");
+					reject(err);
+				}
+				connection.end();
+				console.log("from helper: " + rows[0].current_vote_id);
+
+				resolve(rows[0].current_vote_id);
+			}
+		);
+	});
+}
 
 module.exports = router;

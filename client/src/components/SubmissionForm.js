@@ -67,8 +67,11 @@ class SubmissionForm extends React.Component {
 			body: JSON.stringify(data)
 		})
 			.then((res) => {
-				console.log(res);
+				return res.json();
 				// should probably clear out the searched movies or something
+			})
+			.then((data) => {
+				console.log(data);
 			});
 	}
 
