@@ -7,12 +7,14 @@ class SubmissionForm extends React.Component {
 
 		this.state = {
 			movieName: "",
+			searchedMovie: "",
 			movieUrls: [],
 			movieThumbnails: []
 		}
 
 		this.handleMovieChange = this.handleMovieChange.bind(this);
 		this.searchMovie = this.searchMovie.bind(this);
+		this.selectMovie = this.selectMovie.bind(this);
 	}
 
 	searchMovie(event) {
@@ -24,14 +26,24 @@ class SubmissionForm extends React.Component {
 				return res.json();
 			})
 			.then((res) => {
-				res.items.map((item) => {
-					let movieUrls = this.state.movieUrls.slice();
-					let movieThumbnails = this.state.movieThumbnails.slice();
-					movieUrls.push(item.link);
-					movieThumbnails.push(item.image.thumbnailLink);
-					this.setState({movieUrls: movieUrls, movieThumbnails: movieThumbnails, movieName: ""});
-				});
-				console.log(this.state.movieUrls);
+				if (res.status === 200) {
+					// save movie name for when they click on a movie
+					let searchedMovie = this.state.movieName;
+					this.setState({searchedMovie: searchedMovie});
+
+					res.results.items.map((item) => {
+						let movieUrls = this.state.movieUrls.slice();
+						let movieThumbnails = this.state.movieThumbnails.slice();
+						movieUrls.push(item.link);
+						movieThumbnails.push(item.image.thumbnailLink);
+
+						// save movie urls, thumbnails, and names
+						this.setState({movieUrls: movieUrls, movieThumbnails: movieThumbnails, movieName: ""});
+					});
+					console.log(this.state.movieUrls);
+				} else {
+					console.log("An error occurred");
+				}
 			});
 	}
 
@@ -39,9 +51,30 @@ class SubmissionForm extends React.Component {
 		this.setState({movieName: event.target.value});
 	}
 
+	selectMovie(event) {
+		event.preventDefault();
+		// send the api request to save the event.target.src attribute
+		console.log(this.state.searchedMovie);
+		let data = {
+			movieName: this.state.searchedMovie,
+			movieUrl: event.target.src
+		};
+		fetch("http://45.79.19.55:8080/api/movie", {
+			method: "POST",
+			headers: {
+				"Content-Type": "application/json"
+			},
+			body: JSON.stringify(data)
+		})
+			.then((res) => {
+				console.log(res);
+				// should probably clear out the searched movies or something
+			});
+	}
+
 	render() {
 		let movies = this.state.movieThumbnails.map((item) => {
-			return(<img height="150px" src={item} key={item} alt="test" />)
+			return(<a href="#" key={item} onClick={this.selectMovie}><img height="150px" src={item} alt="test" /></a>)
 		});
 		return (
 			<div>
