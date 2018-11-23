@@ -1,4 +1,5 @@
 import React from 'react';
+import SelectMovieButton from './SelectMovieButton';
 
 class SubmissionForm extends React.Component {
 
@@ -83,7 +84,11 @@ class SubmissionForm extends React.Component {
 	render() {
 		let movies = this.state.movieThumbnails.map((item) => {
 			// these should be their own components
-			return(<button key={item} onClick={this.selectMovie}><img height="150px" src={item} alt="test" /></button>)
+			//return(<button key={item} onClick={this.selectMovie}><img height="150px" src={item} alt="test" /></button>)
+			return <SelectMovieButton
+						onClick={this.selectMovie}
+						src={item}
+					/>;
 		});
 		return (
 			<div>
