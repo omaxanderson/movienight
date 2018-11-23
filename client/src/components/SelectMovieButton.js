@@ -25,7 +25,7 @@ class SelectMovieButton extends React.Component {
 			>
 				<div className="card-image">
 					<img 
-						style={{paddingTop: ".5em", paddingBottom: ".5em"}}
+						style={{paddingTop: ".75em", paddingBottom: ".75em"}}
 						key={this.props.src} 
 						onClick={this.props.onClick} 
 						src={this.props.src} 

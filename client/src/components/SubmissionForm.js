@@ -82,6 +82,7 @@ class SubmissionForm extends React.Component {
 	}
 
 	render() {
+		// change from movieUrls -> movieThumbnails for higher res images
 		let movies = this.state.movieThumbnails.map((item) => {
 			// these should be their own components
 			//return(<button key={item} onClick={this.selectMovie}><img height="150px" src={item} alt="test" /></button>)
