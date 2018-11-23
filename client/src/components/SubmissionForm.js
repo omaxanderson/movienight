@@ -119,7 +119,9 @@ class SubmissionForm extends React.Component {
 						</div>
 
 						<div className="row">
-							{movies}
+							<div className="valign-wrapper">
+								{movies}
+							</div>
 						</div>
 
 						</div>
