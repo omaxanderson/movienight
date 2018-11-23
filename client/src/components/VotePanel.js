@@ -4,14 +4,12 @@ class VotePanel extends React.Component {
 	constructor(props) {
 		super(props);
 
-		console.log("from VotePanel constructor: " + props.movies.length);
 		this.state = {
 			movies: props.movies
 		}
 	}
 
 	render() {
-		console.log(this.state.movies.length);
 		let movies = this.props.movies.map((item) => {
 			return (
 				<a href="#" key={item.movie_name}>
@@ -19,6 +17,9 @@ class VotePanel extends React.Component {
 				</a>
 			)
 		});
+		if (!movies.length) {
+			movies = <p className="grey-text center-align">There are no movies yet, be the first to suggest a movie!</p>;
+		}
 		return(
 			<div>
 				{movies}

@@ -29,15 +29,12 @@ class Home extends React.Component {
 				return res.json();
 			})
 			.then((data) => {
-				console.log("getting data in Home");
-				console.log(data);
 				// here's where we populate state with the results
 				this.setState({movies: data.results});
 			});
 	}
 
 	render() {
-		console.log("rendering from Home: " + this.state.movies.length);
 		return(
 			<div>
 				<TitleBar/>

@@ -46,7 +46,6 @@ class SubmissionForm extends React.Component {
 						this.setState({movieUrls: movieUrls, movieThumbnails: movieThumbnails, movieName: ""});
 						return null;
 					});
-					console.log(this.state.movieUrls);
 				} else {
 					console.log("An error occurred");
 				}
@@ -60,7 +59,6 @@ class SubmissionForm extends React.Component {
 	selectMovie(event) {
 		event.preventDefault();
 		// send the api request to save the event.target.src attribute
-		console.log(this.state.searchedMovie);
 		let data = {
 			movieName: this.state.searchedMovie,
 			movieUrl: event.target.src
@@ -77,7 +75,6 @@ class SubmissionForm extends React.Component {
 				// should probably clear out the searched movies or something
 			})
 			.then((data) => {
-				console.log(data);
 				this.clearState();
 				this.props.movieSelected();
 			});
@@ -85,35 +82,46 @@ class SubmissionForm extends React.Component {
 
 	render() {
 		let movies = this.state.movieThumbnails.map((item) => {
+			// these should be their own components
 			return(<button key={item} onClick={this.selectMovie}><img height="150px" src={item} alt="test" /></button>)
 		});
 		return (
 			<div>
 			<div className="row">
-				<form onSubmit={this.searchMovie} className="col s6 offset-s3 center-align">
+				<div className="col s12 m10 offset-m1">
+					<div className="card ">
+						<div className="card-content">
+						<div className="row">
+						<form onSubmit={this.searchMovie} className="col s12 center-align">
 
-					<div className="row">
-						<div className="input-field col s8" style={{ marginTop: "0px" }}>
-							<input 
-								id="movieName" 
-								type="text" 
-								value={this.state.movieName} 
-								onChange={ this.handleMovieChange } 
-							/>
-							<label htmlFor="movieName">Enter a movie into the vote!</label>
+							<div className="row">
+								<div className="input-field col s8" style={{ marginTop: "0px" }}>
+									<input 
+										id="movieName" 
+										type="text" 
+										value={this.state.movieName} 
+										onChange={ this.handleMovieChange } 
+									/>
+									<label htmlFor="movieName">Enter a movie into the vote!</label>
+								</div>
+								<div className="col s4">
+									<button className="btn waves-effect waves-light" type="submit" name="action">Submit
+										<i className="material-icons right">send</i>
+									</button>
+								</div>
+							</div>
+						</form>
 						</div>
-						<div className="col s4">
-							<button className="btn waves-effect waves-light" type="submit" name="action">Submit
-								<i className="material-icons right">send</i>
-							</button>
+
+						<div className="row">
+							{movies}
+						</div>
+
 						</div>
 					</div>
-				</form>
+				</div>
 			</div>
 			
-			<div className="row">
-				{movies}
-			</div>
 			</div>
 		)
 	}
