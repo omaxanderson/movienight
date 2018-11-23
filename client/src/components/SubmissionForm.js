@@ -15,6 +15,11 @@ class SubmissionForm extends React.Component {
 		this.handleMovieChange = this.handleMovieChange.bind(this);
 		this.searchMovie = this.searchMovie.bind(this);
 		this.selectMovie = this.selectMovie.bind(this);
+		this.clearState = this.clearState.bind(this);
+	}
+
+	clearState() {
+		this.setState({movieName: "", searchedMovie: "", movieUrls: [], movieThumbnails: []});
 	}
 
 	searchMovie(event) {
@@ -39,6 +44,7 @@ class SubmissionForm extends React.Component {
 
 						// save movie urls, thumbnails, and names
 						this.setState({movieUrls: movieUrls, movieThumbnails: movieThumbnails, movieName: ""});
+						return null;
 					});
 					console.log(this.state.movieUrls);
 				} else {
@@ -72,12 +78,14 @@ class SubmissionForm extends React.Component {
 			})
 			.then((data) => {
 				console.log(data);
+				this.clearState();
+				this.props.movieSelected();
 			});
 	}
 
 	render() {
 		let movies = this.state.movieThumbnails.map((item) => {
-			return(<a href="#" key={item} onClick={this.selectMovie}><img height="150px" src={item} alt="test" /></a>)
+			return(<button key={item} onClick={this.selectMovie}><img height="150px" src={item} alt="test" /></button>)
 		});
 		return (
 			<div>

@@ -52,6 +52,30 @@ router.get('/movieVoteId', (req, res) => {
 	console.log("ended connection");
 });
 
+/* GET current movies in the vote list */
+router.get('/movies', (req, res) => {
+	var connection = mysql.createConnection(dbconfig);
+	connection.connect();
+
+	// I'm not sure this is really the best way to get the movie id but oh well
+	getCurrentMovieVoteId()
+		.then((id) => {
+			let query = `SELECT movie_name, thumbnail_url, votes_for, votes_against
+				FROM movie
+				WHERE movie_vote_id = ` + id;
+			connection.query(query, 
+				(err, rows, fields) => {
+					// getting close to callback hell
+					let response = {
+						status: 200,
+						results: rows
+					}
+					res.send(JSON.stringify(response));
+				}
+			);
+		});
+});
+
 /* POST a movie to vote on */
 router.post('/movie', (req, res) => {
 	// make a db connection
