@@ -60,7 +60,7 @@ router.get('/movies', (req, res) => {
 	// I'm not sure this is really the best way to get the movie id but oh well
 	getCurrentMovieVoteId()
 		.then((id) => {
-			let query = `SELECT movie_name, thumbnail_url, votes_for, votes_against
+			let query = `SELECT movie_name, thumbnail_url, movie_url, votes_for, votes_against
 				FROM movie
 				WHERE movie_vote_id = ` + id;
 			connection.query(query, 
@@ -88,11 +88,12 @@ router.post('/movie', (req, res) => {
 			let movie = {
 				movie_name: req.body.movieName,
 				movie_vote_id: id,
-				thumbnail_url: req.body.movieUrl,
+				thumbnail_url: req.body.thumbnailUrl,
 				movie_url: req.body.movieUrl 	// ehh, let's figure out how to pass both url's in this post
 			}
+			console.log(req.body);
 
-			console.log(movie.movie_vote_id);
+			console.log(movie);
 			
 			// insert the movie into the db
 			connection.query(`INSERT INTO movie (movie_name, 

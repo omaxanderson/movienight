@@ -10,7 +10,8 @@ class SubmissionForm extends React.Component {
 			movieName: "",
 			searchedMovie: "",
 			movieUrls: [],
-			movieThumbnails: []
+			movieThumbnails: [],
+			movies: []
 		}
 
 		this.handleMovieChange = this.handleMovieChange.bind(this);
@@ -37,16 +38,11 @@ class SubmissionForm extends React.Component {
 					let searchedMovie = this.state.movieName;
 					this.setState({searchedMovie: searchedMovie});
 
-					res.results.items.map((item) => {
-						let movieUrls = this.state.movieUrls.slice();
-						let movieThumbnails = this.state.movieThumbnails.slice();
-						movieUrls.push(item.link);
-						movieThumbnails.push(item.image.thumbnailLink);
-
-						// save movie urls, thumbnails, and names
-						this.setState({movieUrls: movieUrls, movieThumbnails: movieThumbnails, movieName: ""});
-						return null;
+					let movies = res.results.items.map((item) => {
+						return {movieUrl: item.link, thumbnailLink: item.image.thumbnailLink};
 					});
+
+					this.setState({movies: movies, movieName: ""});
 				} else {
 					console.log("An error occurred");
 				}
@@ -62,8 +58,11 @@ class SubmissionForm extends React.Component {
 		// send the api request to save the event.target.src attribute
 		let data = {
 			movieName: this.state.searchedMovie,
-			movieUrl: event.target.src
+			movieUrl: event.target.dataset.movieurl,
+			movieThumbnail: event.target.src
 		};
+		console.log(event.target);
+		console.log(event.target.dataset.movieurl);
 		fetch("http://45.79.19.55:8080/api/movie", {
 			method: "POST",
 			headers: {
@@ -73,7 +72,6 @@ class SubmissionForm extends React.Component {
 		})
 			.then((res) => {
 				return res.json();
-				// should probably clear out the searched movies or something
 			})
 			.then((data) => {
 				this.clearState();
@@ -83,12 +81,15 @@ class SubmissionForm extends React.Component {
 
 	render() {
 		// change from movieUrls -> movieThumbnails for higher res images
-		let movies = this.state.movieThumbnails.map((item) => {
+		//console.log(this.state.movies);
+		let movies = this.state.movies.map((item) => {
 			// these should be their own components
 			//return(<button key={item} onClick={this.selectMovie}><img height="150px" src={item} alt="test" /></button>)
 			return <SelectMovieButton
 						onClick={this.selectMovie}
-						src={item}
+						src={item.thumbnailLink}
+						movieUrl={item.movieUrl}
+						key={item.thumbnailUrl}
 					/>;
 		});
 		return (

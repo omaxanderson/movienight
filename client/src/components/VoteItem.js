@@ -11,11 +11,12 @@ class VoteItem extends React.Component {
 			// should be made up of maybe a card with the image and two buttons
 		)
 		*/
+//		console.log(this.props);
 		return(
 			<div className="col s3 center-align">
 			<div className="card hoverable">
 				<div className="card-image">
-					<img src={this.props.thumbnailUrl} alt="movie" />
+					<img src={this.props.fullUrl} alt="movie" />
 				</div>
 				<div className="card-content">
 					<div>

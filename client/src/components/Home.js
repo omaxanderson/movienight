@@ -31,6 +31,7 @@ class Home extends React.Component {
 			.then((data) => {
 				// here's where we populate state with the results
 				this.setState({movies: data.results});
+				//console.log(this.state.movies);
 			});
 	}
 

@@ -12,6 +12,7 @@ class VotePanel extends React.Component {
 	}
 
 	render() {
+		//console.log(this.props.movies);
 		let numMovies = this.props.movies.length;
 		let startIdx = 0;
 		let movieGroups = [];
@@ -34,17 +35,6 @@ class VotePanel extends React.Component {
 			)
 		});
 
-		/*
-		let movies = this.props.movies.map((item) => {
-			return (
-				<VoteItem
-					thumbnailUrl={item.thumbnail_url}
-					fullUrl={item.movie_url}
-					movieName={item.movie_name}
-				/>
-			)
-		});
-		*/
 		if (!movies.length) {
 			movies = <p className="grey-text center-align">There are no movies yet, be the first to suggest a movie!</p>;
 		}

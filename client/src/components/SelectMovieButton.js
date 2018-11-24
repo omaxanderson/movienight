@@ -18,6 +18,7 @@ class SelectMovieButton extends React.Component {
 
 
 	render() {
+		console.log(this.props);
 		return(
 			<div 
 				className={"card col s2 center-align " + (this.state.hovering ? "blue-grey" : "")}
@@ -27,6 +28,7 @@ class SelectMovieButton extends React.Component {
 					<img 
 						style={{paddingTop: ".75em", paddingBottom: ".75em"}}
 						key={this.props.src} 
+						data-movieurl={this.props.movieUrl}
 						onClick={this.props.onClick} 
 						src={this.props.src} 
 						alt="test" 
