@@ -2,40 +2,24 @@ import React from 'react';
 
 class SelectMovieButton extends React.Component {
 
-	constructor(props) {
-		super(props);
-
-		this.state = {
-			hovering: false
-		};
-
-		this.hover = this.hover.bind(this);
-	}
-
-	hover() {
-		this.setState({hovering: !this.state.hovering});
-	}
-
-
 	render() {
 		console.log(this.props);
 		return(
+			<div className="col s2 center-align">
 			<div 
-				className={"card col s2 center-align " + (this.state.hovering ? "blue-grey" : "")}
+				className="card hoverable"
 				style={{cursor: "pointer"}}
 			>
 				<div className="card-image">
 					<img 
-						style={{paddingTop: ".75em", paddingBottom: ".75em"}}
 						key={this.props.src} 
 						data-movieurl={this.props.movieUrl}
 						onClick={this.props.onClick} 
 						src={this.props.src} 
 						alt="test" 
-						onMouseEnter={this.hover}
-						onMouseLeave={this.hover}
 					/>
 				</div>
+			</div>
 			</div>
 		)
 	}
