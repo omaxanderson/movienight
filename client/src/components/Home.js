@@ -32,6 +32,9 @@ class Home extends React.Component {
 				// here's where we populate state with the results
 				this.setState({movies: data.results});
 				//console.log(this.state.movies);
+			})
+			.catch((err) => {
+				alert("Uh oh, no response from the server so this site isn't going to work right now. Way to go Max.")
 			});
 	}
 

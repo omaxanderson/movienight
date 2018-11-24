@@ -21,7 +21,7 @@ class SubmissionForm extends React.Component {
 	}
 
 	clearState() {
-		this.setState({movieName: "", searchedMovie: "", movieUrls: [], movieThumbnails: []});
+		this.setState({movieName: "", searchedMovie: "", movieUrls: [], movieThumbnails: [], movies: []});
 	}
 
 	searchMovie(event) {
