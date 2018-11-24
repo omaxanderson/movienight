@@ -13,7 +13,8 @@ class VoteLine extends React.Component {
 					movieName={item.movie_name}
 					votesFor={item.votes_for}
 					votesAgainst={item.votes_against}
-
+					key={item.movie_name}
+					vote={this.props.vote}
 				/>
 			)
 		});

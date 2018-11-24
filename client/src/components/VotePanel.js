@@ -1,5 +1,4 @@
 import React from 'react';
-import VoteItem from './VoteItem';
 import VoteLine from './VoteLine';
 
 class VotePanel extends React.Component {
@@ -9,6 +8,12 @@ class VotePanel extends React.Component {
 		this.state = {
 			movies: props.movies
 		}
+
+		this.vote = this.vote.bind(this);
+	}
+
+	vote(isUpvote, movie) {
+		console.log((isUpvote ? "upvote" : "downvote") + " for " + movie);
 	}
 
 	render() {
@@ -27,10 +32,13 @@ class VotePanel extends React.Component {
 			startIdx += 4;
 		}
 		// they're now split into groups of 4s
+		let groupNum = 0;
 		let movies = movieGroups.map((arr) => {
 			return (
 				<VoteLine
 					movies={arr}
+					key={groupNum++}
+					vote={this.vote}
 				/>
 			)
 		});
