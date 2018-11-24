@@ -98,10 +98,10 @@ class SubmissionForm extends React.Component {
 				<div className="col s12 m10 offset-m1">
 					<div className="card ">
 						<div className="card-content">
-						<div className="row">
+						<div className="row" style={{marginBottom: "0px", marginTop: "1em"}}>
 						<form onSubmit={this.searchMovie} className="col s12 center-align">
 
-							<div className="row">
+							<div className="row" style={{marginBottom: "0px"}}>
 								<div className="input-field col s8" style={{ marginTop: "0px" }}>
 									<input 
 										id="movieName" 
@@ -120,7 +120,7 @@ class SubmissionForm extends React.Component {
 						</form>
 						</div>
 
-						<div className="row">
+						<div className="row" style={{marginBottom: "0px"}}>
 							<div className="valign-wrapper">
 								{movies}
 							</div>
