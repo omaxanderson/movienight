@@ -62,7 +62,8 @@ router.get('/movies', (req, res) => {
 		.then((id) => {
 			let query = `SELECT movie_id, movie_name, thumbnail_url, movie_url, votes_for, votes_against
 				FROM movie
-				WHERE movie_vote_id = ` + id;
+				WHERE movie_vote_id = ` + id
+				+ ` ORDER BY votes_for - votes_against DESC`;
 			connection.query(query, 
 				(err, rows, fields) => {
 					// getting close to callback hell
