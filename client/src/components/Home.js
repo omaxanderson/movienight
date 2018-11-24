@@ -23,6 +23,9 @@ class Home extends React.Component {
 		this.getMovies();
 	}
 
+	// @TODO the localstorage logic isn't quite right
+	// 	if they upvote once, a downvote will simply bring it back to 
+	// 	how it was instead of going -1
 	vote(isUpvote, movieName, movieId) {
 		if (localStorage.getItem(movieId) === (isUpvote ? "for" : "against")) {
 			alert("Woah there pal, you can't vote for the same thing twice...");
