@@ -96,7 +96,7 @@ class SubmissionForm extends React.Component {
 			<div>
 			<div className="row">
 				<div className="col s12 m12">
-					<div className="card ">
+					<div className="card blue-grey lighten-5">
 						<div className="card-content">
 						<div className="row" style={{marginBottom: "0px", marginTop: "1em"}}>
 						<form onSubmit={this.searchMovie} className="col s12 center-align">
