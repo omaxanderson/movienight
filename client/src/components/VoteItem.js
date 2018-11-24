@@ -3,6 +3,17 @@ import React from 'react';
 class VoteItem extends React.Component {
 
 	render() {
+		let score = Math.abs(this.props.votesFor - this.props.votesAgainst);
+		let scoreCol = "";
+		if (this.props.votesFor > this.props.votesAgainst) {
+			scoreCol = " cyan-text ";
+			score = "+ " + score;
+		} else if (this.props.votesFor < this.props.votesAgainst) {
+			scoreCol = " red-text ";
+			score = "- " + score;
+		} else {
+			scoreCol = "";
+		}
 		//	@TODO add the delete function
 		//		icons: clear, close
 		//		keep track of the submission ip, can only delete if from the same ip
@@ -34,8 +45,11 @@ class VoteItem extends React.Component {
 					</div>
 					<div className="row" style={{marginBottom: "0px"}}>
 						<div className="col s12">
-							<h5 style={{marginTop: "0px", marginBottom: "0px"}} className="left red-text">- {this.props.votesAgainst}</h5>
-							<h5 style={{marginTop: "0px", marginBottom: "0px"}} className="right cyan-text lighten-2">+ {this.props.votesFor}</h5>
+							<h5 
+								style={{marginTop: "0px", marginBottom: "0px"}} 
+								className={"center-align" + scoreCol}>
+								{score}
+							</h5>
 						</div>
 					</div>
 				</div>

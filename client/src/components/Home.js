@@ -24,6 +24,10 @@ class Home extends React.Component {
 	}
 
 	vote(isUpvote, movieName, movieId) {
+		if (localStorage.getItem(movieId) === (isUpvote ? "for" : "against")) {
+			alert("Woah there pal, you can't vote for the same thing twice...");
+			return false;
+		}
 		console.log((isUpvote ? "upvote" : "downvote") + " for " + movieName + ": " + movieId);
 		// lets make a post request
 		let url = "http://45.79.19.55:8080/api/movie/vote/" + (isUpvote ? "for" : "against");
@@ -48,6 +52,9 @@ class Home extends React.Component {
 				}
 			}
 			this.setState({movies: movies});
+			// add the vote to the localStorage
+			// this localstorage is kinda hacky but it works well enough
+			localStorage.setItem(movieId, (isUpvote ? "for" : "against"));
 		})
 		.catch((err) => {
 			alert("Sorry, an error occurred on the server. Please try again later.");
