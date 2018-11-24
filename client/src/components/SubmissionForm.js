@@ -112,7 +112,7 @@ class SubmissionForm extends React.Component {
 									<label htmlFor="movieName">Enter a movie into the vote!</label>
 								</div>
 								<div className="col s4">
-									<button className="btn waves-effect waves-light" type="submit" name="action">Submit
+									<button className="btn waves-effect waves-light" type="submit" name="action">Seach
 										<i className="material-icons right">send</i>
 									</button>
 								</div>
