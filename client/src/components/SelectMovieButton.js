@@ -5,7 +5,7 @@ class SelectMovieButton extends React.Component {
 	render() {
 		console.log(this.props);
 		return(
-			<div className="col s2 center-align">
+			<div className="col s12 m2 center-align">
 			<div 
 				className="card hoverable"
 				style={{cursor: "pointer"}}
