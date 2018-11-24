@@ -95,7 +95,7 @@ class SubmissionForm extends React.Component {
 		return (
 			<div>
 			<div className="row">
-				<div className="col s12 m10 offset-m1">
+				<div className="col s12 m12">
 					<div className="card ">
 						<div className="card-content">
 						<div className="row" style={{marginBottom: "0px", marginTop: "1em"}}>

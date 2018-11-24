@@ -74,12 +74,12 @@ class Home extends React.Component {
 		return(
 			<div>
 				<TitleBar/>
-				<SubmissionForm 
-					movieSelected={this.movieSelected}
-				/>
 				<VotePanel 
 					movies={this.state.movies}
 					vote={this.vote}
+				/>
+				<SubmissionForm 
+					movieSelected={this.movieSelected}
 				/>
 			</div>
 		)
