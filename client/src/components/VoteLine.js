@@ -4,7 +4,6 @@ import VoteItem from './VoteItem';
 class VoteLine extends React.Component {
 
 	render() {
-		console.log(this.props.movies);
 		let movies = this.props.movies.map((item) => {
 			return (
 				<VoteItem
@@ -15,6 +14,7 @@ class VoteLine extends React.Component {
 					votesAgainst={item.votes_against}
 					key={item.movie_name}
 					vote={this.props.vote}
+					movieId={item.movie_id}
 				/>
 			)
 		});

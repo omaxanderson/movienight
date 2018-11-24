@@ -22,11 +22,11 @@ class VoteItem extends React.Component {
 				<div className="card-image">
 					<img src={this.props.fullUrl} alt="movie" />
 
-					<button onClick={() => this.props.vote(false, this.props.movieName)} className="left halfway-fab btn-floating btn waves-effect waves-light red">
+					<button onClick={() => this.props.vote(false, this.props.movieName, this.props.movieId)} className="left halfway-fab btn-floating btn waves-effect waves-light red">
 						<i className="material-icons">thumb_down</i>
 					</button>
 
-					<button onClick={() => this.props.vote(true, this.props.movieName)} className="right halfway-fab btn-floating btn waves-effect waves-light cyan lighten-2">
+					<button onClick={() => this.props.vote(true, this.props.movieName, this.props.movieId)} className="right halfway-fab btn-floating btn waves-effect waves-light cyan lighten-2">
 						<i className="material-icons">thumb_up</i>
 					</button>
 				</div>

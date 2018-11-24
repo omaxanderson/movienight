@@ -8,13 +8,8 @@ class VotePanel extends React.Component {
 		this.state = {
 			movies: props.movies
 		}
-
-		this.vote = this.vote.bind(this);
 	}
 
-	vote(isUpvote, movie) {
-		console.log((isUpvote ? "upvote" : "downvote") + " for " + movie);
-	}
 
 	render() {
 		//console.log(this.props.movies);
@@ -38,7 +33,7 @@ class VotePanel extends React.Component {
 				<VoteLine
 					movies={arr}
 					key={groupNum++}
-					vote={this.vote}
+					vote={this.props.vote}
 				/>
 			)
 		});

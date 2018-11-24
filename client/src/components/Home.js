@@ -12,6 +12,7 @@ class Home extends React.Component {
 			movies: []
 		}
 		this.movieSelected = this.movieSelected.bind(this);
+		this.vote = this.vote.bind(this);
 	}
 
 	componentDidMount() {
@@ -20,6 +21,37 @@ class Home extends React.Component {
 
 	movieSelected() {
 		this.getMovies();
+	}
+
+	vote(isUpvote, movieName, movieId) {
+		console.log((isUpvote ? "upvote" : "downvote") + " for " + movieName + ": " + movieId);
+		// lets make a post request
+		let url = "http://45.79.19.55:8080/api/movie/vote/" + (isUpvote ? "for" : "against");
+		console.log(url);
+		fetch(url, {
+			method: "POST",
+			headers: {
+				"Content-Type": "application/json"
+			},
+			body: JSON.stringify({
+				movieId: movieId,
+			})
+		})
+		.then((res) => {
+			return res.json();
+		})
+		.then((data) => {
+			let movies = this.state.movies.slice();
+			for (let i = 0; i < movies.length; i++) {
+				if (movies[i].movie_id === movieId) {
+					isUpvote ? movies[i].votes_for++ : movies[i].votes_against++;
+				}
+			}
+			this.setState({movies: movies});
+		})
+		.catch((err) => {
+			alert("Sorry, an error occurred on the server. Please try again later.");
+		});
 	}
 
 	getMovies() {
@@ -47,6 +79,7 @@ class Home extends React.Component {
 				/>
 				<VotePanel 
 					movies={this.state.movies}
+					vote={this.vote}
 				/>
 			</div>
 		)

@@ -60,7 +60,7 @@ router.get('/movies', (req, res) => {
 	// I'm not sure this is really the best way to get the movie id but oh well
 	getCurrentMovieVoteId()
 		.then((id) => {
-			let query = `SELECT movie_name, thumbnail_url, movie_url, votes_for, votes_against
+			let query = `SELECT movie_id, movie_name, thumbnail_url, movie_url, votes_for, votes_against
 				FROM movie
 				WHERE movie_vote_id = ` + id;
 			connection.query(query, 
@@ -74,6 +74,54 @@ router.get('/movies', (req, res) => {
 				}
 			);
 		});
+});
+
+
+/* POST vote on a movie */
+router.post('/movie/vote/:type', (req, res) => {
+	var connection = mysql.createConnection(dbconfig);
+	connection.connect();
+
+	let sql = "UPDATE movie SET votes_" + req.params.type + " = votes_" + 
+		req.params.type + " + 1 WHERE movie_id = " + req.body.movieId;
+	console.log(sql);
+
+	connection.query(sql, (err, rows, fields) => {
+		if (err) {
+			console.log(err);
+			connection.end();
+			res.send(JSON.stringify({
+				status: 500,
+				message: "Bad request"
+			}));
+		} else {
+			if (rows.affectedRows == 1) {
+				// make another query to get the current number?
+				connection.query("SELECT votes_" + req.params.type + 
+					" AS v FROM movie WHERE movie_id = " + req.body.movieId, (err, rows, fields) => {
+					if (err) {
+						connection.end();
+						res.send(JSON.stringify({
+							status: 500,
+							message: "Bad request"
+						}));
+					} else {	// only success case?
+						res.send(JSON.stringify({
+							status: 200,
+							message: "Successfully updated",
+							currentVotes: rows[0].v
+						}));
+					}
+				});
+			} else {
+				res.send(JSON.stringify({
+					status: 400,
+					message: "Update unsuccessful"
+				}));
+				connection.end();
+			}
+		}
+	});
 });
 
 /* POST a movie to vote on */
