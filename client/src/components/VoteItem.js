@@ -12,6 +12,10 @@ class VoteItem extends React.Component {
 		)
 		*/
 //		console.log(this.props);
+		//	@TODO add the delete function
+		//		icons: clear, close
+		//	@TODO add the like and dislike buttons
+		//		icons: arrow_upward, arrow_downward, thumb_up, thumb_down
 		return(
 			<div className="col s3 center-align">
 			<div className="card hoverable">
