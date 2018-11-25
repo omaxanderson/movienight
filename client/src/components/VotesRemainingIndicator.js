@@ -6,11 +6,11 @@ class VotesRemainingIndicator extends React.Component {
 		console.log("rendering indicator");
 		console.log(this.props.votesRemaining);
 		return (
-			<div className="row right" style={{marginTop: "1.75em"}}>
-				<h4 className="red-text">
+			<div className="" style={{marginTop: "1.75em"}}>
+				<h4 className="left red-text">
 					{this.props.votesRemaining.votesAgainst}/5 
 				</h4>
-				<h4 className="cyan-text">
+				<h4 className="right cyan-text">
 					{this.props.votesRemaining.votesFor}/5 
 				</h4>
 			</div>

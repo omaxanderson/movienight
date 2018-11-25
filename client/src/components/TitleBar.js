@@ -6,9 +6,11 @@ class TitleBar extends React.Component {
 		return(
 			<div className="row">
 				<h2 className="col s6 offset-s3 center-align">Movie Night</h2>
-				<VotesRemainingIndicator 
-					votesRemaining={this.props.votesRemaining}
-				/>
+				<div className="col s2 offset-s1">
+					<VotesRemainingIndicator 
+						votesRemaining={this.props.votesRemaining}
+					/>
+				</div>
 			</div>
 		)
 	}
