@@ -11,6 +11,17 @@ class Home extends React.Component {
 			data: "",
 			movies: []
 		}
+
+		// if the localStorage object hasn't been set yet, do that now
+		if (!localStorage.getItem("votesRemaining")) {
+			//let votesRemaining = {
+			console.log("setting votesRemaining");
+			localStorage.setItem("votesRemaining", JSON.stringify({
+				votesFor: 5,
+				votesAgainst: 5
+			}));
+		}
+
 		this.movieSelected = this.movieSelected.bind(this);
 		this.vote = this.vote.bind(this);
 	}
@@ -26,9 +37,22 @@ class Home extends React.Component {
 	// @TODO the localstorage logic isn't quite right
 	// 	if they upvote once, a downvote will simply bring it back to 
 	// 	how it was instead of going -1
+	// what we're actually going to do is give each person 5 upvotes and 
+	// 5 downvotes, non-refundable
 	vote(isUpvote, movieName, movieId) {
+		/*
 		if (localStorage.getItem(movieId) === (isUpvote ? "for" : "against")) {
 			alert("Woah there pal, you can't vote for the same thing twice...");
+			return false;
+		}
+		*/
+		let votesRemaining = JSON.parse(localStorage.getItem("votesRemaining"));
+		if (isUpvote && !votesRemaining.votesFor) {
+			alert("nope not allowed homie");
+			return false;
+		}
+		if (!isUpvote && !votesRemaining.votesAgainst) {
+			alert("nope not allowed homie 2");
 			return false;
 		}
 		console.log((isUpvote ? "upvote" : "downvote") + " for " + movieName + ": " + movieId);
@@ -55,9 +79,15 @@ class Home extends React.Component {
 				}
 			}
 			this.setState({movies: movies});
+			if (isUpvote) {
+				votesRemaining.votesFor--;
+			} else {
+				votesRemaining.votesAgainst--;
+			}
+			localStorage.setItem("votesRemaining", JSON.stringify(votesRemaining));
 			// add the vote to the localStorage
 			// this localstorage is kinda hacky but it works well enough
-			localStorage.setItem(movieId, (isUpvote ? "for" : "against"));
+			//localStorage.setItem(movieId, (isUpvote ? "for" : "against"));
 		})
 		.catch((err) => {
 			alert("Sorry, an error occurred on the server. Please try again later.");
@@ -80,10 +110,15 @@ class Home extends React.Component {
 			});
 	}
 
+	// @TODO fix the indicator -- it's not updating on the first vote
 	render() {
+		let votesRemaining = JSON.parse(localStorage.getItem("votesRemaining"));
 		return(
 			<div>
-				<TitleBar/>
+				<TitleBar
+					votesAgainst={votesRemaining.votesAgainst}
+					votesFor={votesRemaining.votesFor}
+				/>
 				<VotePanel 
 					movies={this.state.movies}
 					vote={this.vote}
