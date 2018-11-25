@@ -50,11 +50,11 @@ class Home extends React.Component {
 		*/
 		let votesRemaining = JSON.parse(localStorage.getItem("votesRemaining"));
 		if (isUpvote && !votesRemaining.votesFor) {
-			alert("nope not allowed homie");
+			alert("Woah there you don't have any more Thumbs Ups left");
 			return false;
 		}
 		if (!isUpvote && !votesRemaining.votesAgainst) {
-			alert("nope not allowed homie 2");
+			alert("Woah there you don't have any more Thumbs Downs left");
 			return false;
 		}
 		console.log((isUpvote ? "upvote" : "downvote") + " for " + movieName + ": " + movieId);
