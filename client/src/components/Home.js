@@ -9,7 +9,8 @@ class Home extends React.Component {
 
 		this.state = {
 			data: "",
-			movies: []
+			movies: [],
+			votesRemaining: {}
 		}
 
 		// if the localStorage object hasn't been set yet, do that now
@@ -27,6 +28,7 @@ class Home extends React.Component {
 	}
 
 	componentDidMount() {
+		this.setState({votesRemaining: JSON.parse(localStorage.getItem("votesRemaining"))});
 		this.getMovies();
 	}
 
@@ -84,7 +86,9 @@ class Home extends React.Component {
 			} else {
 				votesRemaining.votesAgainst--;
 			}
+
 			localStorage.setItem("votesRemaining", JSON.stringify(votesRemaining));
+			this.setState({votesRemaining: votesRemaining});
 			// add the vote to the localStorage
 			// this localstorage is kinda hacky but it works well enough
 			//localStorage.setItem(movieId, (isUpvote ? "for" : "against"));
@@ -112,12 +116,10 @@ class Home extends React.Component {
 
 	// @TODO fix the indicator -- it's not updating on the first vote
 	render() {
-		let votesRemaining = JSON.parse(localStorage.getItem("votesRemaining"));
 		return(
 			<div>
 				<TitleBar
-					votesAgainst={votesRemaining.votesAgainst}
-					votesFor={votesRemaining.votesFor}
+					votesRemaining={this.state.votesRemaining}
 				/>
 				<VotePanel 
 					movies={this.state.movies}

@@ -7,8 +7,7 @@ class TitleBar extends React.Component {
 			<div className="row">
 				<h2 className="col s6 offset-s3 center-align">Movie Night</h2>
 				<VotesRemainingIndicator 
-					votesAgainst={this.props.votesAgainst}
-					votesFor={this.props.votesFor}
+					votesRemaining={this.props.votesRemaining}
 				/>
 			</div>
 		)
