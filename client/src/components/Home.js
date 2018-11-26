@@ -34,7 +34,7 @@ class Home extends React.Component {
 
 		// basically reset the vote stuff if the saved date is in the past
 		// aka they haven't viewed the page since the last movie night
-		if (endDate && currentDate > endDate) {
+		if (!endDate || currentDate > endDate) {
 			// if localStorage.voteEndDate in the past, reset
 			localStorage.setItem("votesRemaining", JSON.stringify({
 				votesFor: 5,
