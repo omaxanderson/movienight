@@ -2,6 +2,7 @@ import React from 'react';
 import TitleBar from './TitleBar';
 import SubmissionForm from './SubmissionForm';
 import VotePanel from './VotePanel';
+var dateFormat = require('dateformat');
 
 class Home extends React.Component {
 	constructor(props) {
@@ -14,13 +15,43 @@ class Home extends React.Component {
 		}
 
 		// if the localStorage object hasn't been set yet, do that now
+		// @TODO figure out how to reset when a new week has been started
+		// 	- maybe store the end date and compare it to current date
 		if (!localStorage.getItem("votesRemaining")) {
-			//let votesRemaining = {
 			console.log("setting votesRemaining");
 			localStorage.setItem("votesRemaining", JSON.stringify({
 				votesFor: 5,
 				votesAgainst: 5
 			}));
+		}
+
+		let endDate = localStorage.getItem("voteEndDate")
+		let d = new Date();
+		let currentDate = dateFormat(d, "yyyy-mm-dd HH:MM:ss");
+
+		// lil message for Jon
+		console.log("Alright Jon, you're the only one who would look here so I know it's gotta be you. If you feel like cheating the system either just use an incognito browser or take a look at the localStorage data...");
+
+		// basically reset the vote stuff if the saved date is in the past
+		// aka they haven't viewed the page since the last movie night
+		if (endDate && currentDate > endDate) {
+			// if localStorage.voteEndDate in the past, reset
+			localStorage.setItem("votesRemaining", JSON.stringify({
+				votesFor: 5,
+				votesAgainst: 5
+			}));
+			// make a request to set the next end date
+			fetch("http://45.79.19.55:8080/api/voteEndDate")
+				.then((res) => {
+					return res.json();
+				})
+				.then((data) => {
+					// here's where we populate state with the results
+					localStorage.setItem("voteEndDate", data.endDate);
+				})
+				.catch((err) => {
+					alert("Uh oh, no response from the server so this site isn't going to work right now. Way to go Max.")
+				});
 		}
 
 		this.movieSelected = this.movieSelected.bind(this);

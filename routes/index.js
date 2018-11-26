@@ -35,6 +35,30 @@ router.get('/movie/:movieName', function(req, res) {
 	});
 });
 
+/* GET current vote end date */
+router.get('/voteEndDate', (req, res) => {
+	var connection = mysql.createConnection(dbconfig);
+	connection.connect();
+	connection.query("SELECT DATE_FORMAT(MAX(end_date), '%Y-%m-%d %H:%I:%s') AS endDate FROM movie_vote", 
+		(err, rows, fields) => {
+			if (err) {
+				console.log(err);
+				res.send(JSON.stringify({
+					status: 500,
+					message: "Unable to get vote end date"
+				}));
+			} else {
+				res.send(JSON.stringify({
+					status: 200,
+					endDate: rows[0].endDate
+				}));
+				console.log(rows[0]);
+			}
+			connection.end();
+		}
+	);
+});
+
 /* GET current movie_vote_id */
 router.get('/movieVoteId', (req, res) => {
 	var connection = mysql.createConnection(dbconfig);
