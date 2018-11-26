@@ -3,8 +3,6 @@ import React from 'react';
 class VotesRemainingIndicator extends React.Component {
 
 	render() {
-		console.log("rendering indicator");
-		console.log(this.props.votesRemaining);
 		return (
 			<div className="" style={{marginTop: "1.75em", fontFamily: "'Raleway', sans-serif"}}>
 				<h4 className="left red-text">
