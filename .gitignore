@@ -3,3 +3,4 @@ client_temp/
 routes/config.js
 client/node_modules/
 dbconfig.js
+apiKey.js

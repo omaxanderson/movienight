@@ -4,6 +4,7 @@ const config = require('./config');
 const fetch = require('node-fetch');
 const dbconfig = require('../dbconfig');
 var mysql = require('mysql');
+const personalApiKey = require('../apiKey');
 
 /* GET home page. */
 router.get('/', function(req, res) {
@@ -101,6 +102,40 @@ router.get('/movies', (req, res) => {
 		});
 });
 
+/* POST a new movie vote */
+router.post('/newVote', (req, res) => {
+	if (req.body.apiKey !== personalApiKey) {
+		res.send(JSON.stringify({
+			status: 400,
+			message: "invalid api key"
+		});
+		return false;
+	}
+	var connection = mysql.createConnection(dbconfig);
+	connection.connect();
+
+	let sql = `
+		INSERT INTO movie_vote (end_date)  
+		VALUES ((SELECT CONCAT(curdate() + INTERVAL 6 - weekday(curdate()) DAY, " 17:00:00")))
+	`;
+
+	connection.query(sql, (err, rows, fields) => {
+		if (err) {
+			console.log("error occurred on insert: " + err);
+			res.send(JSON.stringify({
+				status: 500,
+				message: "insert unsuccessful"
+			}));
+		} else {
+			console.log("New movie_vote created successfully");
+			res.send(JSON.stringify({
+				status: 200,
+				message: "insert successful"
+			}));
+		}
+		connection.end();
+	});
+});
 
 /* POST vote on a movie */
 router.post('/movie/vote/:type', (req, res) => {
