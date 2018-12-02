@@ -8,6 +8,7 @@ const personalApiKey = require('../apiKey');
 
 /* GET home page. */
 router.get('/', function(req, res) {
+	console.log('Request: ' + req.path);
 	let response = {
 		status: 404,
 		message: "Error: please select an api method."
@@ -17,11 +18,10 @@ router.get('/', function(req, res) {
 
 /* GET google image search */
 router.get('/movie/:movieName', function(req, res) {
+	console.log('Request: ' + req.path);
 	let q = encodeURI(req.params.movieName + " movie poster");
 	let apiKey = config.apiKey;
 	let cx = config.cx;
-	//console.log("api key: " + apiKey);
-	//console.log("cx: " + cx);
 	let url = "https://www.googleapis.com/customsearch/v1?key=" + apiKey + "&cx=" +
 		cx + "&searchType=image&num=5&q=" + q;
 	fetch(url).then((res) => {
@@ -38,6 +38,7 @@ router.get('/movie/:movieName', function(req, res) {
 
 /* GET current vote end date */
 router.get('/voteEndDate', (req, res) => {
+	console.log('Request: ' + req.path);
 	var connection = mysql.createConnection(dbconfig);
 	connection.connect();
 	connection.query("SELECT DATE_FORMAT(MAX(end_date), '%Y-%m-%d %H:%I:%s') AS endDate FROM movie_vote", 
@@ -62,6 +63,7 @@ router.get('/voteEndDate', (req, res) => {
 
 /* GET current movie_vote_id */
 router.get('/movieVoteId', (req, res) => {
+	console.log('Request: ' + req.path);
 	var connection = mysql.createConnection(dbconfig);
 	connection.connect();
 	connection.query("SELECT MAX(movie_vote_id) AS current_vote_id FROM movie_vote", 
@@ -79,6 +81,7 @@ router.get('/movieVoteId', (req, res) => {
 
 /* GET current movies in the vote list */
 router.get('/movies', (req, res) => {
+	console.log('Request: ' + req.path);
 	var connection = mysql.createConnection(dbconfig);
 	connection.connect();
 
@@ -97,6 +100,7 @@ router.get('/movies', (req, res) => {
 						results: rows
 					}
 					res.send(JSON.stringify(response));
+					connection.end();
 				}
 			);
 		});
@@ -104,11 +108,12 @@ router.get('/movies', (req, res) => {
 
 /* POST a new movie vote */
 router.post('/newVote', (req, res) => {
+	console.log('Request: ' + req.path);
 	if (req.body.apiKey !== personalApiKey) {
 		res.send(JSON.stringify({
 			status: 400,
 			message: "invalid api key"
-		});
+		}));
 		return false;
 	}
 	var connection = mysql.createConnection(dbconfig);
@@ -139,6 +144,7 @@ router.post('/newVote', (req, res) => {
 
 /* POST vote on a movie */
 router.post('/movie/vote/:type', (req, res) => {
+	console.log('Request: ' + req.path);
 	var connection = mysql.createConnection(dbconfig);
 	connection.connect();
 
@@ -181,9 +187,9 @@ router.post('/movie/vote/:type', (req, res) => {
 						status: 400,
 						message: "Update unsuccessful"
 					}));
-					connection.end();
 				}
 			}
+			connection.end();
 		});
 	} catch (err) {
 		console.log(err);
@@ -192,6 +198,7 @@ router.post('/movie/vote/:type', (req, res) => {
 
 /* POST a movie to vote on */
 router.post('/movie', (req, res) => {
+	console.log('Request: ' + req.path);
 	// make a db connection
 	var connection = mysql.createConnection(dbconfig);
 	connection.connect();
@@ -253,7 +260,6 @@ function getCurrentMovieVoteId() {
 						reject(err);
 					}
 					connection.end();
-					console.log("from helper: " + rows[0].current_vote_id);
 
 					resolve(rows[0].current_vote_id);
 				}
