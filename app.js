@@ -11,6 +11,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 
+// set the response headers
 app.use((req, res, next) => {
     res.append('Access-Control-Allow-Origin', ['*']);
     res.append('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
@@ -18,16 +19,13 @@ app.use((req, res, next) => {
     next();
 });
 
+// serve the React front end
 app.use(express.static(path.join(__dirname, 'client')));
 
+// set up the api routes
 app.use('/api', router);
-/*
-app.get('/api/helloworld', (req, res) => {
-	console.log("test");
-	res.send("Hello World!");
-});
-*/
 
+// set to port 8080 to match proxy route
 const port = process.env.PORT || '8080';
 app.listen(port);
 
