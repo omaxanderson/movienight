@@ -121,7 +121,7 @@ router.post('/newVote', (req, res) => {
 
 	let sql = `
 		INSERT INTO movie_vote (end_date)  
-		VALUES ((SELECT CONCAT(curdate() + INTERVAL 6 - weekday(curdate()) DAY, " 17:00:00")))
+		VALUES ((SELECT CONCAT(curdate() + INTERVAL 1 WEEK, " 17:00:00")))
 	`;
 
 	connection.query(sql, (err, rows, fields) => {
@@ -133,12 +133,24 @@ router.post('/newVote', (req, res) => {
 			}));
 		} else {
 			console.log("New movie_vote created successfully");
-			res.send(JSON.stringify({
-				status: 200,
-				message: "insert successful"
-			}));
+			console.log(rows);
+			connection.query("SELECT * FROM movie_vote WHERE movie_vote_id = " + rows.insertId,
+				(err2, rows2, fields2) => {
+					console.log(rows2);
+					console.log(err2);
+					console.log(fields2);
+					res.send(JSON.stringify({
+						status: 200,
+						data: {
+							insertId: rows2[0]['movie_vote_id'],
+							endDate: rows2[0]['end_date']
+						},
+						message: "insert successful"
+					}));
+					connection.end();
+				}
+			);
 		}
-		connection.end();
 	});
 });
 
