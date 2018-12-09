@@ -6,8 +6,11 @@ const dbconfig = require('../dbconfig');
 var mysql = require('mysql');
 const personalApiKey = require('../apiKey');
 
+const MOVIENIGHT_ENVIRONMENT = process.env.MOVIENIGHT_ENVIRONMENT;
+
 /* GET home page. */
 router.get('/', function(req, res) {
+	console.log(MOVIENIGHT_ENVIRONMENT);
 	console.log('Request: ' + req.path);
 	let response = {
 		status: 404,
