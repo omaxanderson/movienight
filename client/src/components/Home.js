@@ -2,11 +2,13 @@ import React from 'react';
 import TitleBar from './TitleBar';
 import SubmissionForm from './SubmissionForm';
 import VotePanel from './VotePanel';
+import url from './url';
 var dateFormat = require('dateformat');
 
 class Home extends React.Component {
 	constructor(props) {
 		super(props);
+		console.log("URL: " + url);
 
 		this.state = {
 			data: "",
@@ -41,7 +43,7 @@ class Home extends React.Component {
 				votesAgainst: 5
 			}));
 			// make a request to set the next end date
-			fetch("http://45.79.19.55:8080/api/voteEndDate")
+			fetch(url + "/api/voteEndDate")
 				.then((res) => {
 					return res.json();
 				})
@@ -90,9 +92,9 @@ class Home extends React.Component {
 		}
 		console.log((isUpvote ? "upvote" : "downvote") + " for " + movieName + ": " + movieId);
 		// lets make a post request
-		let url = "http://45.79.19.55:8080/api/movie/vote/" + (isUpvote ? "for" : "against");
-		console.log(url);
-		fetch(url, {
+		let fullUrl = url + "/api/movie/vote/" + (isUpvote ? "for" : "against");
+		console.log(fullUrl);
+		fetch(fullUrl, {
 			method: "POST",
 			headers: {
 				"Content-Type": "application/json"
@@ -131,7 +133,7 @@ class Home extends React.Component {
 
 	getMovies() {
 		// make the request and get all the current movie data
-		fetch("http://45.79.19.55:8080/api/movies")
+		fetch(url + "/api/movies")
 			.then((res) => {
 				return res.json();
 			})

@@ -1,5 +1,6 @@
 import React from 'react';
 import SelectMovieButton from './SelectMovieButton';
+import url from './url';
 
 class SubmissionForm extends React.Component {
 
@@ -28,7 +29,7 @@ class SubmissionForm extends React.Component {
 		event.preventDefault();
 		this.setState({movieUrls: [], movieThumbnails: []});
 		// make the api request to add a movie to the vote list
-		fetch("http://45.79.19.55:8080/api/movie/" + this.state.movieName)
+		fetch(url + "/api/movie/" + this.state.movieName)
 			.then((res) => {
 				return res.json();
 			})
@@ -63,7 +64,7 @@ class SubmissionForm extends React.Component {
 		};
 		console.log(event.target);
 		console.log(event.target.dataset.movieurl);
-		fetch("http://45.79.19.55:8080/api/movie", {
+		fetch(url + "/api/movie", {
 			method: "POST",
 			headers: {
 				"Content-Type": "application/json"
