@@ -226,7 +226,7 @@ router.post('/movie', (req, res) => {
 					movie_name: req.body.movieName,
 					movie_vote_id: id,
 					thumbnail_url: req.body.thumbnailUrl,
-					movie_url: req.body.movieUrl 	// ehh, let's figure out how to pass both url's in this post
+					movie_url: req.body.movieUrl
 				}
 				console.log(req.body);
 
