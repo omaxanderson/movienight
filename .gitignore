@@ -5,3 +5,4 @@ client/node_modules/
 dbconfig.js
 apiKey.js
 client/src/components/url.js
+migrations/migrationDbConfig.js
