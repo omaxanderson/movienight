@@ -7,3 +7,4 @@ apiKey.js
 client/src/components/url.js
 migrations/migrationDbConfig.js
 client/public/.well-known/
+environment.ini
