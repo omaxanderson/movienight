@@ -6,8 +6,6 @@ const dbconfig = require('../dbconfig');
 var mysql = require('mysql');
 const personalApiKey = require('../apiKey');
 
-const MOVIENIGHT_ENVIRONMENT = process.env.MOVIENIGHT_ENVIRONMENT;
-
 /* GET home page. */
 router.get('/', function(req, res) {
 	console.log(MOVIENIGHT_ENVIRONMENT);
@@ -225,13 +223,13 @@ router.post('/movie', (req, res) => {
 				let movie = {
 					movie_name: req.body.movieName,
 					movie_vote_id: id,
-					thumbnail_url: req.body.thumbnailUrl,
+					thumbnail_url: req.body.movieThumbnail,
 					movie_url: req.body.movieUrl
 				}
 				console.log(req.body);
 
+				console.log("MOVIE BEING INSERTED: ");
 				console.log(movie);
-				
 				// insert the movie into the db
 				connection.query(`INSERT INTO movie (movie_name, 
 					movie_vote_id, 
