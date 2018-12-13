@@ -7,7 +7,8 @@ var ini = require('ini');
 const fs = require('fs');
 const http = require('http');
 const https = require('https');
-const router = require('./routes/index');
+const indexRouter = require('./routes/index');
+const userRouter = require('./routes/user');
 
 const config = ini.parse(fs.readFileSync('./environment.ini', 'utf8'));
 
@@ -41,7 +42,8 @@ app.use((req, res, next) => {
 app.use(express.static(path.join(__dirname, 'client')));
 
 // set up the api routes
-app.use('/api', router);
+app.use('/api', indexRouter);
+app.use('/user', userRouter);
 
 
 // set to port 8080 to match proxy route
