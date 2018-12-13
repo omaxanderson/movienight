@@ -93,6 +93,7 @@ class SubmissionForm extends React.Component {
 						key={item.thumbnailUrl}
 					/>;
 		});
+
 		return (
 			<div>
 			<div className="row">
