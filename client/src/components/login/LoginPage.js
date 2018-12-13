@@ -1,4 +1,5 @@
 import React from 'react';
+import url from '../url';
 
 class LoginPage extends React.Component {
 
@@ -13,6 +14,23 @@ class LoginPage extends React.Component {
 			alert("password missing");
 		}
 		// send this username and password to the api, redirect if success, show error if not
+		fetch(url + '/user/login', {
+			method: 'POST',
+			headers: {
+				"Content-Type": "application/json"
+			},
+			body: JSON.stringify({username, password})
+		})
+			.then((res) => res.json())
+			.then((data) => {
+				console.log(data);
+				if (data['status'] === 'success') {
+					window.location.href= '/';
+				} else {
+					console.log('error logging in');
+				}
+			});
+
 	}
 
 	// good god i need to learn how to make proper react components
