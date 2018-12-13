@@ -8,7 +8,6 @@ var dateFormat = require('dateformat');
 class Home extends React.Component {
 	constructor(props) {
 		super(props);
-		console.log("URL: " + url);
 
 		this.state = {
 			data: "",
@@ -93,7 +92,6 @@ class Home extends React.Component {
 		console.log((isUpvote ? "upvote" : "downvote") + " for " + movieName + ": " + movieId);
 		// lets make a post request
 		let fullUrl = url + "/api/movie/vote/" + (isUpvote ? "for" : "against");
-		console.log(fullUrl);
 		fetch(fullUrl, {
 			method: "POST",
 			headers: {
