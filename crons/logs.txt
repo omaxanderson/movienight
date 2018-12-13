@@ -1,2 +1,5 @@
 f2f1f2b9374276cbef9a82d41671e37d8bcc5a73
 { status: 200, message: 'insert successful' }
+{ status: 200,
+  data: { insertId: 15, endDate: '2018-12-16T23:00:00.000Z' },
+  message: 'insert successful' }
