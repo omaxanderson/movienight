@@ -8,7 +8,6 @@ const personalApiKey = require('../apiKey');
 
 /* GET home page. */
 router.get('/', function(req, res) {
-	console.log(MOVIENIGHT_ENVIRONMENT);
 	console.log('Request: ' + req.path);
 	let response = {
 		status: 404,
