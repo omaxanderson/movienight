@@ -12,17 +12,27 @@ router.post('/login', (req, res) => {
 	// load password hash from db
 	var connection = mysql.createConnection(dbconfig);
 	connection.connect();
+	const params = JSON.parse(req.body);
+	console.log(req.session);
 
 	const sql = `SELECT password 
 		FROM user
-		WHERE username = '${req.body.username}'`;
+		WHERE username = '${params.username}'`;
 
 	connection.query(sql, (err, rows, fields) => {
 		if (err) {
 			console.log(err);
-			res.send(JSON.stringify({status: 'error'}));
-		} else if (bcrypt.compareSync(req.body.password, rows[0]['password'])) {
-			//console.log(rows[0]['password']);
+			res.send(JSON.stringify({status: 'error', message: 'Internal server error'}));
+		} else if (rows.length === 0) {
+			res.send(JSON.stringify({status: 'error', message: 'Username not found'}));
+		} else if (!bcrypt.compareSync(params.password, rows[0]['password'])) {
+			res.send(JSON.stringify({status: 'error', message: 'Incorrect password'}));
+		} else {
+			// we're good, generate the cookie
+			
+			// save the cookie to the db
+			
+			// set that cookie!
 			res.send(JSON.stringify({status: 'success'}));
 		}
 	});
