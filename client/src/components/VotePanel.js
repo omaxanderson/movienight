@@ -10,10 +10,9 @@ class VotePanel extends React.Component {
 		}
 	}
 
-
 	render() {
 		//console.log(this.props.movies);
-		let numMovies = this.props.movies.length;
+		let numMovies = this.props.movies ? this.props.movies.length : 0;
 		let startIdx = 0;
 		let movieGroups = [];
 		while (startIdx < numMovies) {

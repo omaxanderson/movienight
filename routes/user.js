@@ -47,7 +47,9 @@ router.post('/login', (req, res) => {
 					console.log('success!');
 					res.cookie('loginCookie', cookie, {
 						maxAge: 1000 * 60 * 60 * 24 * 7 * 2, // 2 weeks
-						httpOnly: true
+						httpOnly: true,
+						resave: true,
+						saveUninitialized: true
 					});
 					res.send(JSON.stringify({status: 'success'}));
 				} else {

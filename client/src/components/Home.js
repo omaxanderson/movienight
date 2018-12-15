@@ -15,7 +15,8 @@ class Home extends React.Component {
 		this.state = {
 			data: "",
 			movies: [],
-			votesRemaining: {}
+			votesRemaining: {},
+			authorized: false
 		}
 
 		// if the localStorage object hasn't been set yet, do that now
@@ -53,6 +54,10 @@ class Home extends React.Component {
 					return res.json();
 				})
 				.then((data) => {
+					if (data.status === 401) {
+						window.location.href= '/login';
+					}
+
 					// here's where we populate state with the results
 					localStorage.setItem("voteEndDate", data.endDate);
 				})
@@ -115,13 +120,18 @@ class Home extends React.Component {
 			return res.json();
 		})
 		.then((data) => {
+			if (data.status === 401) {
+				window.location.href = '/login';
+			}
 			let movies = this.state.movies.slice();
 			for (let i = 0; i < movies.length; i++) {
 				if (movies[i].movie_id === movieId) {
 					isUpvote ? movies[i].votes_for++ : movies[i].votes_against++;
 				}
 			}
+
 			this.setState({movies: movies});
+
 			if (isUpvote) {
 				votesRemaining.votesFor--;
 			} else {
@@ -146,12 +156,16 @@ class Home extends React.Component {
 				return res.json();
 			})
 			.then((data) => {
+				if (data.status === 401) {
+					window.location.href = '/login';
+				}
 				// here's where we populate state with the results
 				this.setState({movies: data.results});
-				//console.log(this.state.movies);
 			})
 			.catch((err) => {
-				alert("Uh oh, no response from the server so this site isn't going to work right now. Way to go Max.")
+				window.location.href = '/login';
+				//alert("Uh oh, no response from the server so this site isn't going to work right now. Way to go Max.")
+				this.setState({ authorized: false });
 			});
 	}
 
