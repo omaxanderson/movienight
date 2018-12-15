@@ -10,11 +10,28 @@ router.get('/', (req, res) => {
 	console.log('hit it');
 });
 
+router.get('/logout', (req, res) => {
+	console.log('logging out');
+	res.clearCookie('userCookie');
+	res.clearCookie('loginCookie');
+
+	// invalidate the login token
+
+	// destroy the session
+	req.session.destroy();
+
+	// redirect to login
+	res.send(JSON.stringify({status: 'success', message: 'Logged out'}));
+});
+
 router.post('/login', (req, res) => {
 	// load password hash from db
 	var connection = mysql.createConnection(dbconfig);
 	connection.connect();
 	const params = JSON.parse(req.body);
+	
+	// kinda hacky for now, but uncomment to get the hash for a password
+	// console.log(bcrypt.hashSync(params.password));
 
 	const sql = `SELECT user_id, password 
 		FROM user
@@ -31,10 +48,11 @@ router.post('/login', (req, res) => {
 		} else {
 			// we're good, generate the cookie
 			const cookie = md5(params.username + Date.now());
+			const userId = rows[0].user_id;
 			
 			// save the cookie to the db
 			const insertSql = `REPLACE INTO session_cookie 
-				(user_id, cookie) VALUES (${rows[0]['user_id']}, '${cookie}')`;
+				(user_id, cookie) VALUES (${userId}, '${cookie}')`;
 
 			connection.query(insertSql, (err, rows, fields) => {
 				console.log(rows.affectedRows);
@@ -43,6 +61,8 @@ router.post('/login', (req, res) => {
 					console.log(err);
 				} else if ([1,2].includes(rows.affectedRows)) {
 					// 1 if just insert, 2 if replacement
+					// set the session user
+					req.session.user = userId;
 					// set that cookie!
 					console.log('success!');
 					res.cookie('loginCookie', cookie, {

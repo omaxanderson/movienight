@@ -110,8 +110,9 @@ class Home extends React.Component {
 		fetch(fullUrl, {
 			method: "POST",
 			headers: {
-				"Content-Type": "application/json"
+				"Content-Type": "text/plain"
 			},
+			credentials: 'include',
 			body: JSON.stringify({
 				movieId: movieId,
 			})
