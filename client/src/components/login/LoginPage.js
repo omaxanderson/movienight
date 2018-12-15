@@ -13,12 +13,14 @@ class LoginPage extends React.Component {
 		if (!password) {
 			alert("password missing");
 		}
+		console.log('logging in...');
 		// send this username and password to the api, redirect if success, show error if not
 		fetch(url + '/user/login', {
 			method: 'POST',
 			headers: {
-				"Content-Type": "application/json"
+				"Content-Type": "text/plain"
 			},
+			credentials: 'include',
 			body: JSON.stringify({username, password})
 		})
 			.then((res) => res.json())
