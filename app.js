@@ -11,6 +11,7 @@ const http = require('http');
 const https = require('https');
 const indexRouter = require('./routes/index');
 const userRouter = require('./routes/user');
+var app = express();
 
 const config = ini.parse(fs.readFileSync('./environment.ini', 'utf8'));
 
@@ -25,7 +26,12 @@ if (config.env !== 'DEBUG') {
 	};
 }
 
-var app = express();
+// set the session
+app.use(session({ secret: 'movienight', cookie: { 
+	maxAge: 6000,
+	resave: true,
+	saveUninitialized: true
+}}));
 
 app.use(express.json());
 //app.use(express.urlencoded({ extended: false }));
@@ -45,6 +51,7 @@ app.use((req, res, next) => {
 	res.append('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,HEAD,OPTIONS');
 	res.append('Access-Control-Allow-Headers', 'Content-Type');
 
+	//console.log('Cookies: ' + req.cookies);
 	console.log(req.cookies);
 
 	next();

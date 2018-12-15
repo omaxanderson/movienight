@@ -1,5 +1,6 @@
 import React from 'react';
 import url from '../url';
+var browserCookies = require('browser-cookies');
 
 class LoginPage extends React.Component {
 
@@ -27,7 +28,9 @@ class LoginPage extends React.Component {
 			.then((data) => {
 				console.log(data);
 				if (data['status'] === 'success') {
-					window.location.href= '/';
+					//window.location.href= '/';
+					// set the cookie
+					// wait first we have to get cookie...
 				} else {
 					console.log('error logging in');
 				}
