@@ -28,7 +28,7 @@ class LoginPage extends React.Component {
 			.then((data) => {
 				console.log(data);
 				if (data['status'] === 'success') {
-					//window.location.href= '/';
+					window.location.href= '/';
 					// set the cookie
 					// wait first we have to get cookie...
 				} else {

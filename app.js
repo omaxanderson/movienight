@@ -55,13 +55,11 @@ app.use((req, res, next) => {
 	res.append('Access-Control-Allow-Headers', 'Content-Type');
 
 	// @TODO check authentication
-	if (!req.cookies.loginCookie) {
+	console.log(req.path);
+	if (!req.cookies.loginCookie && req.path !== '/user/login') {
 		res.send(JSON.stringify({ status: 401, message: 'Unauthorized' }));
 		return;
 	}
-	//console.log('Cookies: ' + req.cookies);
-	console.log(req.cookies);
-	console.log(req.session);
 
 	next();
 });
