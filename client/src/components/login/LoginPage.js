@@ -53,6 +53,7 @@ class LoginPage extends React.Component {
 											<input 
 												id="username" 
 												type="text" 
+												autoCapitalize='false'
 												autoFocus
 											/>
 											<label htmlFor="username">Username</label>

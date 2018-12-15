@@ -71,8 +71,6 @@ app.use((req, res, next) => {
 	if (req.cookies.userCookie && !req.session.user) {
 		res.clearCookie('userCookie');
 	}
-	console.log(req.cookies.userCookie);
-	console.log(req.session.user);
 
 	/*
 	console.log("SESSION DATA");
