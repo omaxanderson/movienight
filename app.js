@@ -49,7 +49,9 @@ var textParser = bodyParser.text();
 
 // set the response headers
 app.use((req, res, next) => {
-	res.append('Access-Control-Allow-Origin', 'http://localhost:3000');
+	res.append('Access-Control-Allow-Origin', config.env === 'DEBUG' 
+		? 'http://localhost:3000' 
+		: 'https://yourmovienight.com');
 	res.append('Vary', 'Origin');
 	res.append('Access-Control-Allow-Credentials', 'true');
 	res.append('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,HEAD,OPTIONS');
