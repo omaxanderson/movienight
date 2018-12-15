@@ -4,10 +4,13 @@ import SubmissionForm from './SubmissionForm';
 import VotePanel from './VotePanel';
 import url from './url';
 var dateFormat = require('dateformat');
+var cookies = require('browser-cookies');
 
 class Home extends React.Component {
 	constructor(props) {
 		super(props);
+
+		// check if 
 
 		this.state = {
 			data: "",
@@ -42,7 +45,10 @@ class Home extends React.Component {
 				votesAgainst: 5
 			}));
 			// make a request to set the next end date
-			fetch(url + "/api/voteEndDate")
+
+			console.log('cookie');
+			console.log(cookies.get('loginCookie'));
+			fetch(url + "/api/voteEndDate", { credentials: 'include' })
 				.then((res) => {
 					return res.json();
 				})
@@ -92,6 +98,10 @@ class Home extends React.Component {
 		console.log((isUpvote ? "upvote" : "downvote") + " for " + movieName + ": " + movieId);
 		// lets make a post request
 		let fullUrl = url + "/api/movie/vote/" + (isUpvote ? "for" : "against");
+		// @TODO here we need to change the content type to text/plain,
+		// 	set credentials: 'include', 
+		// 	and then edit the back end to parse the body as plaintext instead 
+		// 	of automatically picking up the json
 		fetch(fullUrl, {
 			method: "POST",
 			headers: {
@@ -131,7 +141,7 @@ class Home extends React.Component {
 
 	getMovies() {
 		// make the request and get all the current movie data
-		fetch(url + "/api/movies")
+		fetch(url + "/api/movies", { credentials: 'include' })
 			.then((res) => {
 				return res.json();
 			})
