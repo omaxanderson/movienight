@@ -66,13 +66,16 @@ router.get('/movieVoteId', (req, res) => {
 	console.log('Request: ' + req.path);
 	var connection = mysql.createConnection(dbconfig);
 	connection.connect();
-	connection.query("SELECT MAX(movie_vote_id) AS current_vote_id FROM movie_vote", 
+
+	// @TODO fix this 
+	connection.query("SELECT MAX(movie_vote_id) AS current_vote_id FROM movie_night", 
 		(err, rows, fields) => {
 			if (err) {
 				console.log("bummer");
 				throw err;
 			}
 			res.send(JSON.stringify({status: 200, results: rows[0].current_vote_id}));
+			connection.end();
 		}
 	);
 	connection.end();
@@ -124,6 +127,7 @@ router.post('/newVote', (req, res) => {
 		VALUES ((SELECT CONCAT(curdate() + INTERVAL 1 WEEK, " 17:00:00")))
 	`;
 
+	// @TODO fix this??
 	connection.query(sql, (err, rows, fields) => {
 		if (err) {
 			console.log("error occurred on insert: " + err);
