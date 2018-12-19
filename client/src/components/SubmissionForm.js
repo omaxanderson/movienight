@@ -29,7 +29,7 @@ class SubmissionForm extends React.Component {
 		event.preventDefault();
 		this.setState({movieUrls: [], movieThumbnails: []});
 		// make the api request to add a movie to the vote list
-		fetch(url + "/api/movie/" + this.state.movieName)
+		fetch(url + "/api/movie/" + this.state.movieName, { credentials: 'include' })
 			.then((res) => {
 				return res.json();
 			})
@@ -66,8 +66,9 @@ class SubmissionForm extends React.Component {
 		console.log(event.target.dataset.movieurl);
 		fetch(url + "/api/movie", {
 			method: "POST",
+			credentials: 'include',
 			headers: {
-				"Content-Type": "application/json"
+				"Content-Type": "text/plain"
 			},
 			body: JSON.stringify(data)
 		})

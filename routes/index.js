@@ -168,8 +168,10 @@ router.post('/movie/vote/:type', (req, res) => {
 
 /* POST a movie to vote on */
 router.post('/movie', (req, res) => {
-	console.log('Request: ' + req.path);
-	// make a db connection
+	console.log('\tRequest: ' + req.path);
+	console.log(req);
+	console.log("HELLOOOOOOOOOOOOOOOOOOOOOO");
+	const body = JSON.parse(req.body);
 	var connection = mysql.createConnection(dbconfig);
 	connection.connect();
 
@@ -178,12 +180,12 @@ router.post('/movie', (req, res) => {
 			.then((id) => {
 				// create movie obj
 				let movie = {
-					movie_name: req.body.movieName,
+					movie_name: body.movieName,
 					movie_night_id: id,
-					thumbnail_url: req.body.movieThumbnail,
-					movie_url: req.body.movieUrl
-				}
-				console.log(req.body);
+					thumbnail_url: body.movieThumbnail,
+					movie_url: body.movieUrl
+				};
+				console.log(body);
 
 				console.log("MOVIE BEING INSERTED: ");
 				console.log(movie);
