@@ -49,7 +49,7 @@ class Home extends React.Component {
 
 			console.log('cookie');
 			console.log(cookies.get('loginCookie'));
-			fetch(url + "/api/voteEndDate", { credentials: 'include' })
+			fetch(url + "/api/endDate", { credentials: 'include' })
 				.then((res) => {
 					return res.json();
 				})
@@ -85,12 +85,6 @@ class Home extends React.Component {
 	// what we're actually going to do is give each person 5 upvotes and 
 	// 5 downvotes, non-refundable
 	vote(isUpvote, movieName, movieId) {
-		/*
-		if (localStorage.getItem(movieId) === (isUpvote ? "for" : "against")) {
-			alert("Woah there pal, you can't vote for the same thing twice...");
-			return false;
-		}
-		*/
 		let votesRemaining = JSON.parse(localStorage.getItem("votesRemaining"));
 		if (isUpvote && !votesRemaining.votesFor) {
 			alert("Woah there you don't have any more Thumbs Ups left");
@@ -103,10 +97,7 @@ class Home extends React.Component {
 		console.log((isUpvote ? "upvote" : "downvote") + " for " + movieName + ": " + movieId);
 		// lets make a post request
 		let fullUrl = url + "/api/movie/vote/" + (isUpvote ? "for" : "against");
-		// @TODO here we need to change the content type to text/plain,
-		// 	set credentials: 'include', 
-		// 	and then edit the back end to parse the body as plaintext instead 
-		// 	of automatically picking up the json
+
 		fetch(fullUrl, {
 			method: "POST",
 			headers: {
@@ -127,7 +118,7 @@ class Home extends React.Component {
 			let movies = this.state.movies.slice();
 			for (let i = 0; i < movies.length; i++) {
 				if (movies[i].movie_id === movieId) {
-					isUpvote ? movies[i].votes_for++ : movies[i].votes_against++;
+					isUpvote ? movies[i].votes++ : movies[i].votes--;
 				}
 			}
 

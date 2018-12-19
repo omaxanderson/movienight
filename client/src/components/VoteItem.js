@@ -3,20 +3,20 @@ import React from 'react';
 class VoteItem extends React.Component {
 
 	render() {
-		let score = Math.abs(this.props.votesFor - this.props.votesAgainst);
+		//let score = Math.abs(this.props.votesFor - this.props.votesAgainst);
+		let score = this.props.votes || 0;
 		let scoreCol = "";
-		if (this.props.votesFor > this.props.votesAgainst) {
+		if (score > 0) {
 			scoreCol = " cyan-text ";
 			score = "+ " + score;
-		} else if (this.props.votesFor < this.props.votesAgainst) {
+		} else if (score < 0) {
 			scoreCol = " red-text ";
-			score = "- " + score;
+			score = "- " + Math.abs(score);
 		} else {
 			scoreCol = "";
 		}
 		//	@TODO add the delete function
 		//		icons: clear, close
-		//		keep track of the submission ip, can only delete if from the same ip
 		return(
 			<div className="col s12 m3 center-align">
 			<div className="card hoverable">
