@@ -90,6 +90,7 @@ router.get('/movies', (req, res) => {
 					LEFT JOIN movie_vote USING (movie_id)
 				WHERE movie_night_id = ${id}
 				GROUP BY movie_id
+				ORDER BY votes DESC
 			`;
 			db.query(query)
 				.then(rows => {
@@ -169,8 +170,6 @@ router.post('/movie/vote/:type', (req, res) => {
 /* POST a movie to vote on */
 router.post('/movie', (req, res) => {
 	console.log('\tRequest: ' + req.path);
-	console.log(req);
-	console.log("HELLOOOOOOOOOOOOOOOOOOOOOO");
 	const body = JSON.parse(req.body);
 	var connection = mysql.createConnection(dbconfig);
 	connection.connect();
@@ -185,7 +184,6 @@ router.post('/movie', (req, res) => {
 					thumbnail_url: body.movieThumbnail,
 					movie_url: body.movieUrl
 				};
-				console.log(body);
 
 				console.log("MOVIE BEING INSERTED: ");
 				console.log(movie);
@@ -198,7 +196,7 @@ router.post('/movie', (req, res) => {
 					(err, rows, fields) => {
 						if (err) {
 							console.log("gosh darn it that's a bummer");
-							console.log("Sending error response");
+							console.log(err);
 						}
 						connection.end();
 
