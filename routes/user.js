@@ -76,6 +76,8 @@ router.post('/login', (req, res) => {
 					// something bad happened :(
 					res.send(JSON.stringify({status: 'error'}));
 				}
+				// we need to close that shit
+				connection.close();
 			});
 		}
 	});

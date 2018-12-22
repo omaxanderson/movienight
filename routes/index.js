@@ -44,6 +44,7 @@ router.get('/movie/:movieName', function(req, res) {
 /* GET current movie night end date */
 router.get('/endDate', (req, res) => {
 	console.log('Request: ' + req.path);
+	console.log('Opening db connection from /endDate');
 	db.fetchOne("SELECT DATE_FORMAT(MAX(end_date), '%Y-%m-%d %H:%I:%s') AS endDate FROM movie_night")
 		.then(rows => {
 			res.send(JSON.stringify({
@@ -64,6 +65,7 @@ router.get('/endDate', (req, res) => {
 /* GET current movie_night_id */
 router.get('/movieNightId', (req, res) => {
 	console.log('Request: ' + req.path);
+	console.log('Opening db connection from /movieNightId');
 	db.fetchOne("SELECT MAX(movie_night_id) AS current_night_id FROM movie_night")
 		.then(rows => {
 			console.log(rows);
@@ -92,6 +94,7 @@ router.get('/movies', (req, res) => {
 				GROUP BY movie_id
 				ORDER BY votes DESC
 			`;
+			console.log('Opening db connection from /movies');
 			db.query(query)
 				.then(rows => {
 					res.send(JSON.stringify({status: 200, results: rows}));
@@ -119,6 +122,7 @@ router.post('/newVote', (req, res) => {
 	`;
 
 	// @TODO fix this??
+	console.log('Opening db connection from /newVote');
 	db.query(sql)
 		.then(result => {
 			console.log("New movie_night created successfully");
@@ -147,8 +151,7 @@ router.post('/newVote', (req, res) => {
 router.post('/movie/vote/:type', (req, res) => {
 	console.log('Request: ' + req.path);
 	const body = JSON.parse(req.body);
-	console.log(body);
-	console.log(req.session);
+	console.log('Opening db connection from /movie/vote/:type');
 	db.query(`INSERT INTO movie_vote (movie_id, user_id, value) VALUES 
 			(${parseInt(body.movieId)}, 
 				${parseInt(req.session.user)}, 
@@ -171,8 +174,6 @@ router.post('/movie/vote/:type', (req, res) => {
 router.post('/movie', (req, res) => {
 	console.log('\tRequest: ' + req.path);
 	const body = JSON.parse(req.body);
-	var connection = mysql.createConnection(dbconfig);
-	connection.connect();
 
 	try {
 		getCurrentMovieNightId()
@@ -188,26 +189,25 @@ router.post('/movie', (req, res) => {
 				console.log("MOVIE BEING INSERTED: ");
 				console.log(movie);
 				// insert the movie into the db
-				connection.query(`INSERT INTO movie (movie_name, 
-					movie_night_id, 
-					thumbnail_url,
-					movie_url) VALUES (?, ?, ?, ?)`,
-					[movie.movie_name, movie.movie_night_id, movie.thumbnail_url, movie.movie_url],
-					(err, rows, fields) => {
-						if (err) {
-							console.log("gosh darn it that's a bummer");
-							console.log(err);
-						}
-						connection.end();
-
+				console.log('Opening db connection from /movie');
+				db.query(`INSERT INTO movie (movie_name, 
+						movie_night_id, 
+						thumbnail_url,
+						movie_url) VALUES (?, ?, ?, ?)`,
+						[movie.movie_name, movie.movie_night_id, movie.thumbnail_url, movie.movie_url]
+				)
+					.then(rows => {
 						// send response
 						console.log("sending success response");
 						res.send(JSON.stringify({
 							status: 200,
 							message: "Successfully added movie to list"
 						}));
-					}
-				);
+					})
+					.catch(err => {
+						console.log("gosh darn it that's a bummer");
+						console.log(err);
+					});
 			})
 			.catch((err) => {
 				console.log("damn it");
@@ -221,6 +221,7 @@ router.post('/movie', (req, res) => {
 function getCurrentMovieNightId() {
 	return new Promise((resolve, reject) => {
 		try{ 
+			console.log('Opening db connection from getCurrentMovieNightId()');
 			var connection = mysql.createConnection(dbconfig);
 			connection.connect();
 			connection.query("SELECT MAX(movie_night_id) AS current_night_id FROM movie_night", 
@@ -229,9 +230,10 @@ function getCurrentMovieNightId() {
 						console.log("bummer");
 						reject(err);
 					}
-					connection.end();
+					console.log('ending connection in getCurrentMovieNightId()');
 
 					resolve(rows[0].current_night_id);
+					connection.end();
 				}
 			);
 		} catch(err) {
