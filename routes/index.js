@@ -10,6 +10,19 @@ const dbClass = require('./db');
 const db = new dbClass();
 const mysql = require('mysql');
 
+router.get('/test', (req, res) => {
+	console.log("HELLO");
+	userVotesLeft(req, 1)
+		.then(res => {
+			const { votes_for, votes_against } = res;
+			res.send(JSON.stringify({ votes_for, votes_against }));
+		})
+		.catch(err => {
+			console.log(err);
+			res.send(JSON.stringify({ status: 500, message: err }));
+		});
+});
+
 /* GET home page. */
 router.get('/', function(req, res) {
 	console.log('Request: ' + req.path);
@@ -217,6 +230,31 @@ router.post('/movie', (req, res) => {
 		console.log(err);
 	}
 });
+
+function userVotesLeft(req, movieNightId) {
+	const userId = req.session.user;
+	//const movieNightId = session.movieNightId;
+	return new Promise((resolve, reject) => {
+		const sql = `
+			SELECT SUM(value < 0) AS 'votes_against', SUM(value > 0) AS 'votes_for'
+			FROM movie
+				JOIN movie_vote USING (movie_id)
+			WHERE movie_vote.user_id = ${userId}
+			AND movie_night_id = ${movieNightId}
+		`;
+
+		db.fetchOne(sql)
+			.then(rows => {
+				console.log(rows);
+				console.log("RESOLVING");
+				resolve(rows);
+			})
+			.catch(err => {
+				console.log("REJECTING");
+				reject(err);
+			});
+	});
+}
 
 function getCurrentMovieNightId() {
 	return new Promise((resolve, reject) => {
