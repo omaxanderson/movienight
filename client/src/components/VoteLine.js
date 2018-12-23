@@ -14,6 +14,7 @@ class VoteLine extends React.Component {
 					vote={this.props.vote}
 					movieId={item.movie_id}
 					votes={item.votes}
+					votesRemaining={this.props.votesRemaining}
 				/>
 			)
 		});

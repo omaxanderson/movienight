@@ -33,6 +33,7 @@ class VotePanel extends React.Component {
 					movies={arr}
 					key={groupNum++}
 					vote={this.props.vote}
+					votesRemaining={this.props.votesRemaining}
 				/>
 			)
 		});

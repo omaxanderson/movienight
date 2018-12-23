@@ -55,7 +55,6 @@ router.post('/login', (req, res) => {
 				(user_id, cookie) VALUES (${userId}, '${cookie}')`;
 
 			connection.query(insertSql, (err, rows, fields) => {
-				console.log(rows.affectedRows);
 				if (err) {
 					// do some error handling
 					console.log(err);
@@ -64,7 +63,6 @@ router.post('/login', (req, res) => {
 					// set the session user
 					req.session.user = userId;
 					// set that cookie!
-					console.log('success!');
 					res.cookie('loginCookie', cookie, {
 						maxAge: 1000 * 60 * 60 * 24 * 7 * 2, // 2 weeks
 						httpOnly: true,
