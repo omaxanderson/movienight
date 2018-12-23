@@ -19,7 +19,6 @@ function userVotesLeft(req) {
 
 				db.fetchOne(sql)
 					.then(rows => {
-						console.log('resolving from userVotesLeft');
 						resolve(rows);
 					})
 					.catch(err => {
@@ -41,7 +40,6 @@ function getCurrentMovieNightId() {
 			connection.query("SELECT MAX(movie_night_id) AS current_night_id FROM movie_night", 
 				(err, rows, fields) => {
 					if (err) {
-						console.log("bummer");
 						reject(err);
 					}
 					connection.end();

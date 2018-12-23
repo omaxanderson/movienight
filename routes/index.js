@@ -15,13 +15,6 @@ const NUM_VOTES_ALLOWED = 5;
 
 /* GET user votes */
 router.get('/userVotes', (req, res) => {
-	const promise = functions.userVotesLeft(req);
-	promise.then(test1 => {
-		console.log('inside promise stuff: ');
-		console.log(test1);
-	});
-	console.log('outside promise stuff: ');
-	console.log(promise);
 	functions.userVotesLeft(req)
 		.then(result => {
 			res.send(JSON.stringify(result));
@@ -71,7 +64,6 @@ router.get('/endDate', (req, res) => {
 				status: 200,
 				endDate: rows.endDate
 			}));
-			console.log(rows);
 		})
 		.catch(err => {
 			console.log('/endDate ERROR:' + err);
@@ -87,7 +79,6 @@ router.get('/movieNightId', (req, res) => {
 	console.log('Request: ' + req.path);
 	db.fetchOne("SELECT MAX(movie_night_id) AS current_night_id FROM movie_night")
 		.then(rows => {
-			console.log(rows);
 			res.send(JSON.stringify({status: 200, results: rows.current_night_id}));
 		})
 		.catch(err => {
@@ -130,7 +121,6 @@ router.get('/movies', (req, res) => {
 									votes_for
 								}
 							};
-							console.log(result);
 							res.send(JSON.stringify(result));
 						})
 						.catch(err => {
@@ -206,7 +196,6 @@ router.post('/movie/vote/:type', (req, res) => {
 						} else {
 							res.send(JSON.stringify({ status: 200, message: 'success' }));
 						}
-						console.log(rows);
 					})
 					.catch(err => {
 						console.log(err);
@@ -236,7 +225,6 @@ router.post('/movie', (req, res) => {
 					movie_url: body.movieUrl
 				};
 
-				console.log("MOVIE BEING INSERTED: ");
 				console.log(movie);
 				// insert the movie into the db
 				connection.query(`INSERT INTO movie (movie_name, 
@@ -246,13 +234,11 @@ router.post('/movie', (req, res) => {
 					[movie.movie_name, movie.movie_night_id, movie.thumbnail_url, movie.movie_url],
 					(err, rows, fields) => {
 						if (err) {
-							console.log("gosh darn it that's a bummer");
 							console.log(err);
 						}
 						connection.end();
 
 						// send response
-						console.log("sending success response");
 						res.send(JSON.stringify({
 							status: 200,
 							message: "Successfully added movie to list"
@@ -261,7 +247,6 @@ router.post('/movie', (req, res) => {
 				);
 			})
 			.catch((err) => {
-				console.log("damn it");
 				console.log(err);
 			});
 	} catch(err) {
@@ -283,12 +268,9 @@ function userVotesLeft(req, movieNightId) {
 
 		db.fetchOne(sql)
 			.then(rows => {
-				console.log(rows);
-				console.log("RESOLVING");
 				resolve(rows);
 			})
 			.catch(err => {
-				console.log("REJECTING");
 				reject(err);
 			});
 	});
@@ -302,7 +284,6 @@ function getCurrentMovieNightId() {
 			connection.query("SELECT MAX(movie_night_id) AS current_night_id FROM movie_night", 
 				(err, rows, fields) => {
 					if (err) {
-						console.log("bummer");
 						reject(err);
 					}
 					connection.end();
