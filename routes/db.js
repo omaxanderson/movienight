@@ -15,7 +15,6 @@ class db {
 				} else {
 					resolve(rows);
 				}
-				console.log("ending connection in query");
 				connection.end();
 			});
 		});
@@ -32,7 +31,6 @@ class db {
 				} else {
 					resolve(rows[0]);
 				}
-				console.log("ending connection in fetchOne");
 				connection.end();
 			});
 		});

@@ -3,6 +3,8 @@ const dbconfig = require('../dbconfig');
 const dbClass = require('./db');
 const db = new dbClass();
 
+const NUM_VOTES_ALLOWED = 5;
+
 function userVotesLeft(req) {
 	const userId = req.session.user;
 	//const movieNightId = session.movieNightId;
@@ -10,7 +12,8 @@ function userVotesLeft(req) {
 		getCurrentMovieNightId()
 			.then(id => {
 				const sql = `
-					SELECT SUM(value < 0) AS 'votes_against', SUM(value > 0) AS 'votes_for'
+					SELECT IF(SUM(value < 0) IS NOT NULL, SUM(value < 0), 0) AS 'votes_against', 
+						IF(SUM(value > 0) IS NOT NULL, SUM(value > 0), 0) AS 'votes_for'
 					FROM movie
 						JOIN movie_vote USING (movie_id)
 					WHERE movie_vote.user_id = ${userId}
@@ -19,7 +22,11 @@ function userVotesLeft(req) {
 
 				db.fetchOne(sql)
 					.then(rows => {
-						resolve(rows);
+						// we should do the change here
+						let { votes_against, votes_for } = rows;
+						votes_against = NUM_VOTES_ALLOWED - votes_against;
+						votes_for = NUM_VOTES_ALLOWED - votes_for;
+						resolve({votes_against, votes_for});
 					})
 					.catch(err => {
 						reject(err);

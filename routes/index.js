@@ -17,9 +17,11 @@ const NUM_VOTES_ALLOWED = 5;
 router.get('/userVotes', (req, res) => {
 	functions.userVotesLeft(req)
 		.then(result => {
+			console.log(result);
 			res.send(JSON.stringify(result));
 		})
 		.catch(err => {
+			console.log(err);
 			res.send(JSON.stringify({status: 500, message: "Internal server error" }));
 		});
 });
@@ -109,17 +111,10 @@ router.get('/movies', (req, res) => {
 					// also get the number of votes left
 					functions.userVotesLeft(req)
 						.then(votes => {
-							// we only allow 5 votes each
-							let { votes_against, votes_for } = votes;
-							votes_against = NUM_VOTES_ALLOWED - votes_against;
-							votes_for = NUM_VOTES_ALLOWED - votes_for;
 							const result = {
 								status: 200,
 								results: rows,
-								votes: {
-									votes_against,
-									votes_for
-								}
+								votes
 							};
 							res.send(JSON.stringify(result));
 						})
@@ -182,15 +177,19 @@ router.post('/movie/vote/:type', (req, res) => {
 	// check to make sure they still have any votes remaining
 	functions.userVotesLeft(req)
 		.then(votes => {
+			console.log(votes);
 			if ((req.params.type ==='for' && !votes.votes_for) ||
 				(req.params.type ==='against' && !votes.votes_against)) {
+				console.log('NOT inserting new vote');
 				res.send(JSON.stringify({status: 400, message: `You have no more ${req.params.type} votes left!`}));
 			} else {
+				console.log('inserting new vote');
 				db.query(`INSERT INTO movie_vote (movie_id, user_id, value) VALUES 
 						(${parseInt(body.movieId)}, 
 							${parseInt(req.session.user)}, 
 							${req.params.type === 'for' ? 1 : -1})`)
 					.then(rows => {
+						console.log(rows);
 						if (!rows.affectedRows) {
 							res.send(JSON.stringify({ status: 500, message: err }));
 						} else {
