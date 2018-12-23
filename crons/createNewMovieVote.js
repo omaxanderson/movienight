@@ -1,22 +1,14 @@
 const apiKey = require('../apiKey');
-const fetch = require('node-fetch');
+const dbClass = require('../routes/db');
+const db = new dbClass();
 
-// make POST request to the backend
-fetch("http://45.79.19.55:8080/api/newVote", {
-	method: "POST",
-	headers: {
-		"Content-Type": "application/json"
-	},
-	body: JSON.stringify({
-		apiKey: apiKey
+db.query(`
+		INSERT INTO movie_night (end_date)  
+		VALUES ((SELECT CONCAT(curdate() + INTERVAL 1 WEEK, " 17:00:00")))
+	`)
+	.then(result => {
+		console.log('successfully created new movie night');
 	})
-})
-	.then((res) => {
-		return res.json();
-	})
-	.then((data) => {
-		console.log(data);
-	})
-	.catch((err) => {
+	.catch(err => {
 		console.log(err);
 	});
