@@ -188,24 +188,34 @@ router.post('/newVote', (req, res) => {
 router.post('/movie/vote/:type', (req, res) => {
 	console.log('Request: ' + req.path);
 	const body = JSON.parse(req.body);
-	console.log(body);
-	console.log(req.session);
-	db.query(`INSERT INTO movie_vote (movie_id, user_id, value) VALUES 
-			(${parseInt(body.movieId)}, 
-				${parseInt(req.session.user)}, 
-				${req.params.type === 'for' ? 1 : -1})`)
-		.then(rows => {
-			if (!rows.affectedRows) {
-				res.send(JSON.stringify({ status: 500, message: err }));
+
+	// check to make sure they still have any votes remaining
+	functions.userVotesLeft(req)
+		.then(votes => {
+			if ((req.params.type ==='for' && !votes.votes_for) ||
+				(req.params.type ==='against' && !votes.votes_against)) {
+				res.send(JSON.stringify({status: 400, message: `You have no more ${req.params.type} votes left!`}));
 			} else {
-				res.send(JSON.stringify({ status: 200, message: 'success' }));
+				db.query(`INSERT INTO movie_vote (movie_id, user_id, value) VALUES 
+						(${parseInt(body.movieId)}, 
+							${parseInt(req.session.user)}, 
+							${req.params.type === 'for' ? 1 : -1})`)
+					.then(rows => {
+						if (!rows.affectedRows) {
+							res.send(JSON.stringify({ status: 500, message: err }));
+						} else {
+							res.send(JSON.stringify({ status: 200, message: 'success' }));
+						}
+						console.log(rows);
+					})
+					.catch(err => {
+						console.log(err);
+					});
 			}
-			console.log(rows);
 		})
 		.catch(err => {
-			console.log(err);
+			res.send(JSON.stringify({status: 500, message: err}));
 		});
-
 });
 
 /* POST a movie to vote on */
