@@ -25,24 +25,28 @@ class VoteItem extends React.Component {
 
 					<button 
 						onClick={() => this.props.vote(false, this.props.movieName, this.props.movieId)} 
+						disabled={!this.props.votesRemaining.votes_against}
 						className="left hide-on-small-only show-on-medium-and-up halfway-fab btn-floating btn waves-effect waves-light red">
 						<i className="material-icons">thumb_down</i>
 					</button>
 
 					<button 
 						onClick={() => this.props.vote(true, this.props.movieName, this.props.movieId)} 
+						disabled={!this.props.votesRemaining.votes_for}
 						className="right hide-on-small-only show-on-medium-and-up halfway-fab btn-floating btn waves-effect waves-light cyan lighten-2">
 						<i className="material-icons">thumb_up</i>
 					</button>
 				
 					<button 
 						onClick={() => this.props.vote(false, this.props.movieName, this.props.movieId)} 
+						disabled={!this.props.votesRemaining.votes_against}
 						className="left show-on-small hide-on-med-and-up halfway-fab btn-floating btn-large waves-effect waves-light red">
 						<i className="material-icons">thumb_down</i>
 					</button>
 
 					<button 
 						onClick={() => this.props.vote(true, this.props.movieName, this.props.movieId)} 
+						disabled={!this.props.votesRemaining.votes_for}
 						className="right show-on-small hide-on-med-and-up halfway-fab btn-floating btn-large waves-effect waves-light cyan lighten-2">
 						<i className="material-icons">thumb_up</i>
 					</button>

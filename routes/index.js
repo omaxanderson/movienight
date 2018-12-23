@@ -11,6 +11,8 @@ const dbClass = require('./db');
 const db = new dbClass();
 const mysql = require('mysql');
 
+const NUM_VOTES_ALLOWED = 5;
+
 /* GET user votes */
 router.get('/userVotes', (req, res) => {
 	const promise = functions.userVotesLeft(req);
@@ -113,7 +115,27 @@ router.get('/movies', (req, res) => {
 			`;
 			db.query(query)
 				.then(rows => {
-					res.send(JSON.stringify({status: 200, results: rows}));
+					// also get the number of votes left
+					functions.userVotesLeft(req)
+						.then(votes => {
+							// we only allow 5 votes each
+							let { votes_against, votes_for } = votes;
+							votes_against = NUM_VOTES_ALLOWED - votes_against;
+							votes_for = NUM_VOTES_ALLOWED - votes_for;
+							const result = {
+								status: 200,
+								results: rows,
+								votes: {
+									votes_against,
+									votes_for
+								}
+							};
+							console.log(result);
+							res.send(JSON.stringify(result));
+						})
+						.catch(err => {
+							res.send(JSON.stringify({status: 500, message: 'Server error: ' + err }));
+						});
 				})
 				.catch(err => {
 					res.send(JSON.stringify({status: 500, message: err}));
