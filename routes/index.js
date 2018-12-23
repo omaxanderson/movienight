@@ -3,6 +3,7 @@ var router = express.Router();
 const config = require('./config');
 const fetch = require('node-fetch');
 const personalApiKey = require('../apiKey');
+const functions = require('./functions');
 
 // database setup
 const dbconfig = require('../dbconfig');
@@ -10,16 +11,21 @@ const dbClass = require('./db');
 const db = new dbClass();
 const mysql = require('mysql');
 
-router.get('/test', (req, res) => {
-	console.log("HELLO");
-	userVotesLeft(req, 1)
-		.then(res => {
-			const { votes_for, votes_against } = res;
-			res.send(JSON.stringify({ votes_for, votes_against }));
+/* GET user votes */
+router.get('/userVotes', (req, res) => {
+	const promise = functions.userVotesLeft(req);
+	promise.then(test1 => {
+		console.log('inside promise stuff: ');
+		console.log(test1);
+	});
+	console.log('outside promise stuff: ');
+	console.log(promise);
+	functions.userVotesLeft(req)
+		.then(result => {
+			res.send(JSON.stringify(result));
 		})
 		.catch(err => {
-			console.log(err);
-			res.send(JSON.stringify({ status: 500, message: err }));
+			res.send(JSON.stringify({status: 500, message: "Internal server error" }));
 		});
 });
 
